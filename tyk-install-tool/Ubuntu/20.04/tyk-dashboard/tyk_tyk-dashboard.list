@@ -1,0 +1,2 @@
+deb https://packagecloud.io/tyk/tyk-dashboard/ubuntu/ bionic main
+deb-src https://packagecloud.io/tyk/tyk-dashboard/ubuntu/ bionic main
