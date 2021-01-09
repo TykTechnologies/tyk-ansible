@@ -23,7 +23,7 @@ sudo apt install -y tyk-pump
 sudo /opt/tyk-pump/install/setup.sh \
   --redishost=localhost \
   --redisport=6379 \
-  --mongo=mongodb://localhost/tyk_analytics
+  --mongo=mongodb://localhost:27017/tyk_analytics
 
 ###########################################################
 # Enable and start tyk-pump service

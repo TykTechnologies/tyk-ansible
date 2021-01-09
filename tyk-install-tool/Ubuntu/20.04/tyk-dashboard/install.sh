@@ -24,9 +24,9 @@ sudo /opt/tyk-dashboard/install/setup.sh \
   --listenport=3000 \
   --redishost=localhost \
   --redisport=6379 \
-  --mongo=mongodb://localhost/tyk_analytics \
+  --mongo=mongodb://localhost:27017/tyk_analytics \
   --tyk_api_hostname=ec2-44-242-137-103.us-west-2.compute.amazonaws.com:8080 \
-  --tyk_node_hostname=http://localhost \
+  --tyk_node_hostname=ec2-44-242-137-103.us-west-2.compute.amazonaws.com \
   --tyk_node_port=8080 \
   --portal_root=/portal \
   --domain=ec2-44-242-137-103.us-west-2.compute.amazonaws.com
