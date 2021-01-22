@@ -1,3 +1,7 @@
+# Tested ##################################################
+# RHEL 7
+###########################################################
+
 ###########################################################
 # Install EPEL
 ###########################################################
@@ -12,8 +16,21 @@ sudo yum install -y python34 pygpgme yum-utils wget
 ###########################################################
 # Copy tyk-gateway yum repo config
 ###########################################################
-sudo rm -rf /etc/yum.repos.d/tyk_tyk-gateway*
-sudo cp tyk_tyk-gateway.repo /etc/yum.repos.d/tyk_tyk-gateway.repo
+sudo rm /etc/yum.repos.d/tyk_tyk-gateway.repo 2> /dev/null
+
+echo '[tyk_tyk-gateway]
+name=tyk_tyk-gateway
+baseurl=https://packagecloud.io/tyk/tyk-gateway/el/7/$basearch
+repo_gpgcheck=1
+gpgcheck=1
+enabled=1
+gpgkey=https://keyserver.tyk.io/tyk.io.rpm.signing.key.2020
+       https://packagecloud.io/tyk/tyk-gateway/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300' > tyk_tyk-gateway.repo
+
+sudo mv tyk_tyk-gateway.repo  /etc/yum.repos.d/tyk_tyk-gateway.repo
 
 ###########################################################
 # Install tyk-gateway
