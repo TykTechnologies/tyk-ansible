@@ -1,0 +1,53 @@
+---
+- name: Inject Tyk environment varibales into /etc/environment
+  vars:
+    gh: "{{ groups['gateway'][0] if gateway_host == None else gateway_host }}"
+    mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
+    rh: "{{ groups['redis'][0] if redis_host == None else redis_host }}"
+
+  lineinfile:
+    dest: /etc/sysconfig/tyk-dashboard
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_DB_LISTENPORT=",                  line: "TYK_DB_LISTENPORT={{ dashboard_port }}"}
+    - { regexp: "^TYK_DB_TYKAPI_HOST=",                 line: "TYK_DB_TYKAPI_HOST={{ gateway_protocol }}://{{ gh }}"}
+    - { regexp: "^TYK_DB_TYKAPI_PORT=",                 line: "TYK_DB_TYKAPI_PORT={{ gateway_port }}"}
+    - { regexp: "^TYK_DB_MONGOURL=",                    line: "TYK_DB_MONGOURL=mongodb://{{ mh }}:{{ mongodb_port }}/tyk_analytics"}
+    - { regexp: "^TYK_DB_HOSTCONFIG_HOSTNAME=",         line: "TYK_DB_HOSTCONFIG_HOSTNAME={{ gh }}"}
+    - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",  line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway_port }}"}
+    - { regexp: "^TYK_DB_REDISHOST=",                   line: "TYK_DB_REDISHOST={{ rh }}"}
+    - { regexp: "^TYK_DB_REDISPORT=",                   line: "TYK_DB_REDISPORT={{ redis_port }}"}
+    - { regexp: "^TYK_DB_ENABLECLUSTER=",               line: "TYK_DB_ENABLECLUSTER={{ redis_enable_cluster }}"}
+    - { regexp: "^TYK_DB_REDISUSESSL=",                 line: "TYK_DB_REDISUSESSL={{ redis_enable_ssl }}"}
+
+- name: Install tyk-dashboard required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3
+    - pygpgme
+    - wget
+
+- name: Copy tyk_tyk-dashboard.repo
+  copy:
+    src: ../files/tyk_tyk-dashboard.repo
+    dest: /etc/yum.repos.d/tyk_tyk-dashboard.repo
+
+- name: Install tyk-dashboard
+  package:
+    name: tyk-dashboard
+    state: present
+
+- name: Copying tyk-dashboard config
+  template:
+    src: ../files/tyk_analytics.conf
+    dest: /opt/tyk-dashboard/tyk_analytics.conf
+
+- name: Enable tyk-dashboard
+  service:
+    name: tyk-dashboard
+    state: started
+    enabled: yes

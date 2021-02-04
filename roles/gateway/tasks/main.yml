@@ -1,0 +1,55 @@
+---
+- name: Inject Tyk environment varibales into /etc/environment
+  vars:
+    dh: "{{ groups['dashboard'][0] if dashboard_host == None else dashboard_host }}"
+    rh: "{{ groups['redis'][0] if redis_host == None else redis_host }}"
+
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+
+  with_items:
+    - { regexp: "^TYK_GW_LISTENPORT=",                        line: "TYK_GW_LISTENPORT={{ gateway_port }}"}
+    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",   line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}"}
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=", line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}"}
+    - { regexp: "^TYK_GW_STORAGE_HOST=",                      line: "TYK_GW_STORAGE_HOST={{ rh }}"}
+    - { regexp: "^TYK_GW_STORAGE_PORT=",                      line: "TYK_GW_STORAGE_PORT={{ redis_port }}"}
+    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=",             line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis_enable_cluster }}"}
+    - { regexp: "^TYK_GW_STORAGE_USESSL=",                    line: "TYK_GW_STORAGE_USESSL={{ redis_enable_ssl }}"}
+
+- name: Install Epel
+  package:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+
+- name: Install tyk-gateway required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3
+    - pygpgme
+    - wget
+
+- name: Copy tyk_tyk-gateway.repo
+  copy:
+    src: ../files/tyk_tyk-gateway.repo
+    dest: /etc/yum.repos.d/tyk_tyk-gateway.repo
+
+- name: Install tyk-gateway
+  package:
+    name: tyk-gateway
+    state: present
+
+- name: Copying tyk-gateway config
+  template:
+    src: ../files/tyk.conf
+    dest: /opt/tyk-gateway/tyk.conf
+
+- name: Enable tyk-gateway
+  service:
+    name: tyk-gateway
+    state: started
+    enabled: yes

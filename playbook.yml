@@ -1,0 +1,62 @@
+---
+- hosts: redis
+  become: true
+  vars_files:
+  - ./vars/redis.yml
+
+  roles:
+    - redis
+
+  tags:
+    - redis
+    - tyk-pro
+    - tyk-ce
+
+- hosts: mongodb
+  become: true
+  vars_files:
+  - ./vars/mongodb.yml
+
+  roles:
+    - mongodb
+
+  tags:
+    - mongodb
+    - tyk-pro
+
+- hosts: dashboard
+  become: true
+  vars_files:
+  - ./vars/tyk.yml
+
+  roles:
+    - dashboard
+
+  tags:
+    - dashboard
+    - tyk-pro
+
+- hosts: gateway
+  become: true
+  vars_files:
+    - ./vars/tyk.yml
+
+  roles:
+    - gateway
+
+  tags:
+    - gateway
+    - tyk-pro
+    - tyk-ce
+
+- hosts: pump
+  become: true
+  vars_files:
+    - ./vars/tyk.yml
+
+  roles:
+    - pump
+
+  tags:
+    - pump
+    - tyk-pro
