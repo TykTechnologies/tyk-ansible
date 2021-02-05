@@ -9,8 +9,6 @@
 
   tags:
     - redis
-    - tyk-pro
-    - tyk-ce
 
 - hosts: mongodb
   become: true
@@ -22,7 +20,6 @@
 
   tags:
     - mongodb
-    - tyk-pro
 
 - hosts: dashboard
   become: true
