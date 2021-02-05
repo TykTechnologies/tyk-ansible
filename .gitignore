@@ -1,4 +1,4 @@
 **/*.pem
 **/.DS_Store
-**/hosts
+**/hosts.yml
 **/ansible.cfg

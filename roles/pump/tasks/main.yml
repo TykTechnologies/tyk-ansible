@@ -28,15 +28,15 @@
 
 - name: Copying tyk-pump config
   vars:
-    mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
+    mh: "{{ hostvars['mongodb']['ansible_host'] if mongodb_host == None else mongodb_host }}"
   template:
     src: ../files/pump.conf
     dest: /opt/tyk-pump/pump.conf
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-pump
   vars:
-    mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
-    rh: "{{ groups['redis'][0] if redis_host == None else redis_host }}"
+    mh: "{{ hostvars['mongodb']['ansible_host'] if mongodb_host == None else mongodb_host }}"
+    rh: "{{ hostvars['redis']['ansible_host'] if redis_host == None else redis_host }}"
 
   lineinfile:
     dest: /etc/sysconfig/tyk-pump

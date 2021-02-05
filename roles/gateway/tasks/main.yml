@@ -33,8 +33,8 @@
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway
   vars:
-    dh: "{{ groups['dashboard'][0] if dashboard_host == None else dashboard_host }}"
-    rh: "{{ groups['redis'][0] if redis_host == None else redis_host }}"
+    dh: "{{ hostvars['dashboard']['ansible_host'] if dashboard_host == None else dashboard_host }}"
+    rh: "{{ hostvars['redis']['ansible_host'] if redis_host == None else redis_host }}"
 
   lineinfile:
     dest: /etc/sysconfig/tyk-gateway
