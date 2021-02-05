@@ -1,5 +1,39 @@
 ---
-- include_tasks: install-redhat-7.yml
+- name: Gather os specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Add mongodb public key to verify package
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-4.4.asc
+    state: present
   when:
-    - ansible_distribution == "RedHat"
-    - ansible_distribution_major_version == "7"
+    - ansible_distribution == "Ubuntu"
+
+- name: "Copy {{ package_def_file }}"
+  copy:
+    src: "../files/{{ package_def_file }}"
+    dest: "{{ package_def_folder }}/{{ package_def_file }}"
+
+- name: Install MongoDB
+  package:
+    name: mongodb-org
+    state: present
+    update_cache: yes
+
+- name: Enable MongoDB
+  service:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: Inject bind address into /etc/mongod.conf
+  lineinfile:
+    dest: /etc/mongod.conf
+    regexp: "^  bindIp: "
+    line: "  bindIp: {{ bind_address }}"
+
+- name: Restart Redis
+  service:
+    name: mongod
+    state: restarted
+    enabled: yes

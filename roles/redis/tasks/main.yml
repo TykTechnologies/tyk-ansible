@@ -1,5 +1,38 @@
 ---
-- include_tasks: install-redhat-7.yml
+- name: Gather os specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Ensure packages are up to date
+  package:
+    update_cache: yes
+
+- name: Install Epel
+  package:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution_major_version == "7"
+
+- name: Install Redis
+  package:
+    name: "{{ service_name }}"
+    state: present
+
+- name: Enable Redis
+  service:
+    name: "{{ service_name }}"
+    state: started
+    enabled: yes
+
+- name: "Inject bind address into {{ config_path }}"
+  lineinfile:
+    dest: "{{ config_path }}"
+    regexp: "^bind "
+    line: "bind {{ bind_address }}"
+
+- name: Restart Redis
+  service:
+    name: "{{ service_name }}"
+    state: restarted
+    enabled: yes

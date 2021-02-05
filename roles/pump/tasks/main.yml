@@ -1,5 +1,39 @@
 ---
-- name: Inject Tyk environment varibales into /etc/environment
+- name: Gather os specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Add tyk-pump public key to verify package
+  apt_key:
+    url: https://packagecloud.io/tyk/tyk-pump/gpgkey
+    state: present
+  when:
+    - ansible_distribution == "Ubuntu"
+
+- name: Install tyk-pump required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ required_packages }}"
+
+- name: "Copy {{ package_def_file }}"
+  copy:
+    src: "../files/{{ package_def_file }}"
+    dest: "{{ package_def_folder }}/{{ package_def_file }}"
+
+- name: Install tyk-pump
+  package:
+    name: tyk-pump
+    state: present
+    update_cache: yes
+
+- name: Copying tyk-pump config
+  vars:
+    mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
+  template:
+    src: ../files/pump.conf
+    dest: /opt/tyk-pump/pump.conf
+
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-pump
   vars:
     mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
     rh: "{{ groups['redis'][0] if redis_host == None else redis_host }}"
@@ -9,38 +43,12 @@
     create: true
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
-
   with_items:
+
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOST=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOST={{ rh }}"}
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PORT=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PORT={{ redis_port }}"}
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER=", line: "TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER={{ redis_enable_cluster }}"}
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis_enable_ssl }}"}
-
-- name: Install tyk-pump required packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - python3
-    - pygpgme
-    - wget
-
-- name: Copy tyk_tyk-pump.repo
-  copy:
-    src: ../files/tyk_tyk-pump.repo
-    dest: /etc/yum.repos.d/tyk_tyk-pump.repo
-
-- name: Install tyk-pump
-  package:
-    name: tyk-pump
-    state: present
-
-- name: Copying tyk-pump config
-  vars:
-    mh: "{{ groups['mongodb'][0] if mongodb_host == None else mongodb_host }}"
-  template:
-    src: ../files/pump.conf
-    dest: /opt/tyk-pump/pump.conf
 
 - name: Enable tyk-pump
   service:
