@@ -7,7 +7,7 @@
     url: https://packagecloud.io/tyk/tyk-dashboard/gpgkey
     state: present
   when:
-    - ansible_distribution == "Ubuntu"
+    ansible_distribution == "Ubuntu"
 
 - name: Install tyk-dashboard required packages
   package:

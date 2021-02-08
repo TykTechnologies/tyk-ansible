@@ -1,0 +1,5 @@
+package_def_file: tyk_tyk-dashboard.repo
+package_def_folder: /etc/yum.repos.d
+required_packages:
+  - python3
+  - wget

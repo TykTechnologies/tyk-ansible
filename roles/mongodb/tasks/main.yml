@@ -7,7 +7,7 @@
     url: https://www.mongodb.org/static/pgp/server-4.4.asc
     state: present
   when:
-    - ansible_distribution == "Ubuntu"
+    ansible_distribution == "Ubuntu"
 
 - name: "Copy {{ package_def_file }}"
   template:

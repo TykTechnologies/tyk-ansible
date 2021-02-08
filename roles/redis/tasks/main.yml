@@ -11,8 +11,8 @@
     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     state: present
   when:
-    - ansible_distribution == "RedHat"
-    - ansible_distribution_major_version == "7"
+    ansible_distribution == "RedHat" and ansible_distribution_major_version == "7" or
+    ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
 
 - name: Install Redis
   package:
