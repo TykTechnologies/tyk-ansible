@@ -1,6 +1,16 @@
 ---
-- name: Gather os specific variables
-  include_vars: "{{ ansible_distribution }}.yml"
+- name: Gather RedHat based systems' specific variables
+  include_vars: "redhat.yml"
+  when:
+    ansible_distribution == "RedHat" or
+    ansible_distribution == "CentOS" or
+    ansible_distribution == "Amazon"
+
+- name: Gather Debian based systems' specific variables
+  include_vars: "debian.yml"
+  when:
+    ansible_distribution == "Debian" or
+    ansible_distribution == "Ubuntu"
 
 - name: Add tyk-pump public key to verify package
   apt_key:
