@@ -10,7 +10,7 @@
     - ansible_distribution == "Ubuntu"
 
 - name: "Copy {{ package_def_file }}"
-  copy:
+  template:
     src: "../files/{{ package_def_file }}"
     dest: "{{ package_def_folder }}/{{ package_def_file }}"
 
