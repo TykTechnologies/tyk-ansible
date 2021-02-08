@@ -1,0 +1,2 @@
+service_name: redis-server
+config_path: /etc/redis/redis.conf

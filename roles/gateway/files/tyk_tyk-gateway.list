@@ -1,2 +1,2 @@
-deb https://packagecloud.io/tyk/tyk-gateway/ubuntu/ bionic main
-deb-src https://packagecloud.io/tyk/tyk-gateway/ubuntu/ bionic main
+deb https://packagecloud.io/tyk/tyk-gateway/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
+deb-src https://packagecloud.io/tyk/tyk-gateway/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main

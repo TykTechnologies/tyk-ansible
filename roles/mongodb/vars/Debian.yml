@@ -1,0 +1,2 @@
+package_def_file: mongodb-org-4.4.list
+package_def_folder: /etc/apt/sources.list.d

@@ -1,0 +1,4 @@
+package_def_file: tyk_tyk-pump.list
+package_def_folder: /etc/apt/sources.list.d
+required_packages:
+  - apt-transport-https
