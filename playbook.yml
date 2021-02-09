@@ -18,6 +18,7 @@
 
   roles:
     - community.mongodb.mongodb_repository
+    - mongodb
     - community.mongodb.mongodb_install
     - community.mongodb.mongodb_mongod
 

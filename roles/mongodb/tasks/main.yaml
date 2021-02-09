@@ -1,0 +1,13 @@
+---
+- name: Ensure MongoDB yum repository exists
+  yum_repository:
+    name: "mongodb-{{ mongodb_version }}"
+    description: "Official MongoDB {{ mongodb_version }} yum repo"
+    baseurl: "https://repo.mongodb.org/yum/redhat/7/mongodb-org/{{ mongodb_version }}/x86_64/"
+    gpgcheck: true
+    gpgkey: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
+  register: _yum
+  until: _yum is succeeded
+  retries: 5
+  when:
+    ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"

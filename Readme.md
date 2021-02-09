@@ -79,5 +79,3 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 | redis_enable_ssl | `false` | Enable if redis connection is secured with SSL |
 | mongodb_host | | MongoDB server host if different than the hosts url |
 | mongodb_port | `27017` | MongoDB server listening port |
-
-##
