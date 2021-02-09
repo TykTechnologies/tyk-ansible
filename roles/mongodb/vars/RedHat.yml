@@ -1,3 +1,0 @@
-package_def_file: mongodb-org-4.4.repo
-package_def_folder: /etc/yum.repos.d
-
