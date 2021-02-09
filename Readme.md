@@ -50,13 +50,18 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 
 | Variable | default value | Comments |
 | --------- | :---------: | --------- |
-| bind_address | `0.0.0.0` | Binding address of MongoDB |
+| bind_ip | `0.0.0.0` | Binding address of MongoDB |
+| mongodb_version | `4.4` | MongoDB version |
+
+Read more about MongoDB configuration [here](https://github.com/ansible-collections/community.mongodb).
 
 - `vars/redis.yml`
 
 | Variable | default value | Comments |
 | --------- | :---------: | --------- |
 | redis_bind_interface | `0.0.0.0` | Binding address of Redis |
+
+Read more about Redis configuration [here](https://github.com/geerlingguy/ansible-role-redis).
 
 - `vars/tyk.yml`
 
@@ -74,3 +79,5 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | redis_enable_ssl | `false` | Enable if redis connection is secured with SSL |
 | mongodb_host | | MongoDB server host if different than the hosts url |
 | mongodb_port | `27017` | MongoDB server listening port |
+
+##
