@@ -17,7 +17,9 @@
   - ./vars/mongodb.yml
 
   roles:
-    - mongodb
+    - community.mongodb.mongodb_repository
+    - community.mongodb.mongodb_install
+    - community.mongodb.mongodb_mongod
 
   tags:
     - mongodb

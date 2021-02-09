@@ -1,5 +1,0 @@
-{% if ansible_distribution == 'Ubuntu' %}
-deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/4.4 multiverse
-{% elif ansible_distribution == 'Debian' %}
-deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/4.4 main
-{% endif %}
