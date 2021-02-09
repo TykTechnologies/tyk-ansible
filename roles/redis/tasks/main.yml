@@ -1,17 +1,4 @@
 ---
-- name: Gather RedHat based systems' specific variables
-  include_vars: "redhat.yml"
-  when:
-    ansible_distribution == "RedHat" or
-    ansible_distribution == "CentOS" or
-    ansible_distribution == "Amazon"
-
-- name: Gather Debian based systems' specific variables
-  include_vars: "debian.yml"
-  when:
-    ansible_distribution == "Debian" or
-    ansible_distribution == "Ubuntu"
-
 - name: Ensure packages are up to date
   package:
     update_cache: yes
@@ -24,26 +11,3 @@
     ansible_distribution == "RedHat" and ansible_distribution_major_version == "7" or
     ansible_distribution == "CentOS" and ansible_distribution_major_version == "7" or
     ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
-
-- name: Install Redis
-  package:
-    name: "{{ service_name }}"
-    state: present
-
-- name: Enable Redis
-  service:
-    name: "{{ service_name }}"
-    state: started
-    enabled: yes
-
-- name: "Inject bind address into {{ config_path }}"
-  lineinfile:
-    dest: "{{ config_path }}"
-    regexp: "^bind "
-    line: "bind {{ bind_address }}"
-
-- name: Restart Redis
-  service:
-    name: "{{ service_name }}"
-    state: restarted
-    enabled: yes

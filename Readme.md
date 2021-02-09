@@ -56,7 +56,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 
 | Variable | default value | Comments |
 | --------- | :---------: | --------- |
-| bind_address | `0.0.0.0` | Binding address of Redis |
+| redis_bind_interface | `0.0.0.0` | Binding address of Redis |
 
 - `vars/tyk.yml`
 

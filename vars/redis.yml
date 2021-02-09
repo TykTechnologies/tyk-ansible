@@ -1,1 +1,1 @@
-bind_address: 0.0.0.0
+redis_bind_interface: 0.0.0.0

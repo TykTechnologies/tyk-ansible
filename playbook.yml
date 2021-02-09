@@ -6,6 +6,7 @@
 
   roles:
     - redis
+    - geerlingguy.redis
 
   tags:
     - redis
