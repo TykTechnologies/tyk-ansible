@@ -1,4 +1,4 @@
-# Tyk Install Tool Repo
+# Tyk Ansible Playbook Repo
 This repo allows you to install Tyk to any server(s) of your choice using Ansible.
 
 ## Requirements
