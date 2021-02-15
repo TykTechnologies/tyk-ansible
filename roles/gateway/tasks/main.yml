@@ -47,8 +47,7 @@
   template:
     src: ../files/tyk_ce.conf
     dest: /opt/tyk-gateway/tyk.conf
-  tags:
-    - tyk-ce
+  when: "'tyk-ce' in ansible_run_tags"
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway
   vars:
