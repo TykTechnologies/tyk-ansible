@@ -13,13 +13,13 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 ## Installation flavors
 Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command. Not specifying a tag will install **Tyk Pro** as well as **Redis** and **MongoDB**.
 
-- **tyk-pro**: `tyk-dashboard`, `tyk-gateway`, `tyk-pump`
-- **tyk-ce**: `tyk-gateway`
+- **tyk-pro**: `dashboard`, `gateway`, `pump`
+- **tyk-ce**: `gateway` with CE config
 - **redis**: `redis`
 - **mongodb**: `mongodb`
-- **dashboard**: `tyk-dashboard`
-- **tyk-gateway**: `tyk-gateway`
-- **tyk-pump**: `tyk-pump`
+- **tyk-dashboard**: `dashboard`
+- **tyk-gateway**: `gateway`
+- **tyk-pump**: `pump`
 
 ## Supported Servers
 | Distribution | Version | Supported |
