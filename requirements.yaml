@@ -1,5 +1,6 @@
 roles:
   - name: geerlingguy.redis
+  - name: geerlingguy.docker
 
 collections:
   - name: community.mongodb
