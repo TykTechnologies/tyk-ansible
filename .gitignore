@@ -3,3 +3,5 @@
 **/hosts.yaml
 **/pt-hosts.yaml
 **/ansible.cfg
+performance-testing/*.txt
+pt-playbook.yaml
