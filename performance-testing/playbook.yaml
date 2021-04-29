@@ -2,13 +2,8 @@
 - hosts: all
   become: true
 
-  vars:
-    pip_install_packages:
-      - name: docker
-
   roles:
-    - geerlingguy.docker
-    - geerlingguy.pip
+    - docker
 
 - hosts: upstream
   become: true
