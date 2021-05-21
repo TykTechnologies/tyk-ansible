@@ -15,7 +15,6 @@
   when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
 
 - name: Install docker
-  become: true
   shell: amazon-linux-extras install docker -y
   when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
 
@@ -34,8 +33,13 @@
       name: docker
   when: ansible_distribution != "Amazon" and ansible_distribution_major_version != "2"
 
+- name: Ensure Pip is installed.
+  package:
+    name: python2-pip
+    state: present
+  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
+
 - name: Ensure docker python packages are installed.
   pip:
     name: docker
-    executable: pip
   when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
