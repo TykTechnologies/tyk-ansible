@@ -8,11 +8,13 @@ gateway_port: 8080
 
 redis_host:
 redis_port: 6379
+redis_password:
 redis_enable_cluster: false
 redis_enable_ssl: false
 
 mongodb_host:
 mongodb_port: 27017
 
+dashboard_license:
 tyk_admin_secret: 12345
 tyk_shared_secret: 352d20ee67be67f6340b4c0605b044b7

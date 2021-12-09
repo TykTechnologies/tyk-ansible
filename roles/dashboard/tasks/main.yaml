@@ -49,6 +49,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
+    - { regexp: "^TYK_DB_LICENSEKEY=",                            line: "TYK_DB_LICENSEKEY={{ dashboard_license }}" }
     - { regexp: "^TYK_DB_LISTENPORT=",                            line: "TYK_DB_LISTENPORT={{ dashboard_port }}" }
     - { regexp: "^TYK_DB_TYKAPI_HOST=",                           line: "TYK_DB_TYKAPI_HOST={{ gateway_protocol }}://{{ gh }}" }
     - { regexp: "^TYK_DB_TYKAPI_PORT=",                           line: "TYK_DB_TYKAPI_PORT={{ gateway_port }}" }
@@ -60,6 +61,7 @@
     - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",            line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway_port }}" }
     - { regexp: "^TYK_DB_REDISHOST=",                             line: "TYK_DB_REDISHOST={{ rh }}" }
     - { regexp: "^TYK_DB_REDISPORT=",                             line: "TYK_DB_REDISPORT={{ redis_port }}" }
+    - { regexp: "^TYK_DB_REDISPASSWORD=",                         line: "TYK_DB_REDISPASSWORD={{ redis_password }}" }
     - { regexp: "^TYK_DB_ENABLECLUSTER=",                         line: "TYK_DB_ENABLECLUSTER={{ redis_enable_cluster }}" }
     - { regexp: "^TYK_DB_REDISUSESSL=",                           line: "TYK_DB_REDISUSESSL={{ redis_enable_ssl }}" }
     - { regexp: "^TYK_DB_PAGESIZE=",                              line: "TYK_DB_PAGESIZE=10" }
