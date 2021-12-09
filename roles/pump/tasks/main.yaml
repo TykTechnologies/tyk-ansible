@@ -37,29 +37,43 @@
     state: present
     update_cache: yes
 
-- name: Copying tyk-pump config
-  vars:
-    mh: "{{ hostvars['mongodb']['ansible_host'] if mongodb_host == None else mongodb_host }}"
-  template:
-    src: ../files/pump.conf
-    dest: /opt/tyk-pump/pump.conf
-
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-pump
   vars:
     mh: "{{ hostvars['mongodb']['ansible_host'] if mongodb_host == None else mongodb_host }}"
     rh: "{{ hostvars['redis']['ansible_host'] if redis_host == None else redis_host }}"
-
   lineinfile:
     dest: /etc/sysconfig/tyk-pump
     create: true
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOST=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOST={{ rh }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PORT=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PORT={{ redis_port }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER=", line: "TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER={{ redis_enable_cluster }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis_enable_ssl }}"}
+    - { regexp: "^TYK_PMP_OMITCONFIGFILE=",                           line: "TYK_PMP_OMITCONFIGFILE=true"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGETYPE=",                     line: "TYK_PMP_ANALYTICSSTORAGETYPE=redis"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=",              line: "TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=redis"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOST=",              line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOST={{ rh }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PORT=",              line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PORT={{ redis_port }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOSTS=",             line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOSTS="}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_USERNAME=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_USERNAME="}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PASSWORD=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PASSWORD="}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE=0"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_MAXIDLE=",           line: "TYK_PMP_ANALYTICSSTORAGECONFIG_MAXIDLE=100"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_MAXACTIVE=",         line: "TYK_PMP_ANALYTICSSTORAGECONFIG_MAXACTIVE=100"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER=",     line: "TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER={{ redis_enable_cluster }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",       line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis_enable_ssl }}"}
+    - { regexp: "^TYK_PMP_PURGEDELAY=",                               line: "TYK_PMP_PURGEDELAY=2"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_TYPE=",                         line: "TYK_PMP_PUMPS_MONGO_TYPE=mongo"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=",          line: "TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=tyk_analytics"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOURL=",                line: "TYK_PMP_PUMPS_MONGO_META_MONGOURL=mongodb://tyk-mongo:27017/tyk_analytics"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MAXINSERTBATCHSIZEBYTES=", line: "TYK_PMP_PUMPS_MONGO_META_MAXINSERTBATCHSIZEBYTES=80000"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MAXDOCUMENTSIZEBYTES=",    line: "TYK_PMP_PUMPS_MONGO_META_MAXDOCUMENTSIZEBYTES=20112"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGG_TYPE=",                      line: "TYK_PMP_PUMPS_MONGOAGG_TYPE=mongo-pump-aggregate"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGG_META_MONGOURL=",             line: "TYK_PMP_PUMPS_MONGOAGG_META_MONGOURL=mongodb://tyk-mongo:27017/tyk_analytics"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGG_META_USEMIXEDCOLLECTION=",   line: "TYK_PMP_PUMPS_MONGOAGG_META_USEMIXEDCOLLECTION=true"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=",          line: "TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=tyk_uptime_analytics"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=",                line: "TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=mongodb://tyk-mongo:27017/tyk_analytics"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MAXINSERTBATCHSIZEBYTES=", line: "TYK_PMP_UPTIMEPUMPCONFIG_MAXINSERTBATCHSIZEBYTES=500000"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MAXDOCUMENTSIZEBYTES=",    line: "TYK_PMP_UPTIMEPUMPCONFIG_MAXDOCUMENTSIZEBYTES=200000"}
+    - { regexp: "^TYK_PMP_DONTPURGEUPTIMEDATA=",                      line: "TYK_PMP_DONTPURGEUPTIMEDATA=false"}
 
 - name: Enable tyk-pump
   service:
