@@ -13,3 +13,6 @@ redis_enable_ssl: false
 
 mongodb_host:
 mongodb_port: 27017
+
+tyk_admin_secret: 12345
+tyk_shared_secret: 352d20ee67be67f6340b4c0605b044b7

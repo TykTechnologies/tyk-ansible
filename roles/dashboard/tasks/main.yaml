@@ -37,11 +37,6 @@
     state: present
     update_cache: yes
 
-- name: Copying tyk-dashboard config
-  template:
-    src: ../files/tyk_analytics.conf
-    dest: /opt/tyk-dashboard/tyk_analytics.conf
-
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-dashboard
   vars:
     gh: "{{ hostvars['gateway']['ansible_host'] if gateway_host == None else gateway_host }}"
@@ -54,16 +49,66 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_DB_LISTENPORT=",                  line: "TYK_DB_LISTENPORT={{ dashboard_port }}"}
-    - { regexp: "^TYK_DB_TYKAPI_HOST=",                 line: "TYK_DB_TYKAPI_HOST={{ gateway_protocol }}://{{ gh }}"}
-    - { regexp: "^TYK_DB_TYKAPI_PORT=",                 line: "TYK_DB_TYKAPI_PORT={{ gateway_port }}"}
-    - { regexp: "^TYK_DB_MONGOURL=",                    line: "TYK_DB_MONGOURL=mongodb://{{ mh }}:{{ mongodb_port }}/tyk_analytics"}
-    - { regexp: "^TYK_DB_HOSTCONFIG_HOSTNAME=",         line: "TYK_DB_HOSTCONFIG_HOSTNAME={{ gh }}"}
-    - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",  line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway_port }}"}
-    - { regexp: "^TYK_DB_REDISHOST=",                   line: "TYK_DB_REDISHOST={{ rh }}"}
-    - { regexp: "^TYK_DB_REDISPORT=",                   line: "TYK_DB_REDISPORT={{ redis_port }}"}
-    - { regexp: "^TYK_DB_ENABLECLUSTER=",               line: "TYK_DB_ENABLECLUSTER={{ redis_enable_cluster }}"}
-    - { regexp: "^TYK_DB_REDISUSESSL=",                 line: "TYK_DB_REDISUSESSL={{ redis_enable_ssl }}"}
+    - { regexp: "^TYK_DB_LISTENPORT=",                            line: "TYK_DB_LISTENPORT={{ dashboard_port }}" }
+    - { regexp: "^TYK_DB_TYKAPI_HOST=",                           line: "TYK_DB_TYKAPI_HOST={{ gateway_protocol }}://{{ gh }}" }
+    - { regexp: "^TYK_DB_TYKAPI_PORT=",                           line: "TYK_DB_TYKAPI_PORT={{ gateway_port }}" }
+    - { regexp: "^TYK_DB_TYKAPI_SECRET=",                         line: "TYK_DB_TYKAPI_SECRET={{ tyk_shared_secret }}" }
+    - { regexp: "^TYK_DB_ADMINSECRET=",                           line: "TYK_DB_ADMINSECRET={{ tyk_admin_secret }}" }
+    - { regexp: "^TYK_DB_NODESECRET=",                            line: "TYK_DB_NODESECRET={{ tyk_shared_secret }}" }
+    - { regexp: "^TYK_DB_MONGOURL=",                              line: "TYK_DB_MONGOURL=mongodb://{{ mh }}:{{ mongodb_port }}/tyk_analytics" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_HOSTNAME=",                   line: "TYK_DB_HOSTCONFIG_HOSTNAME={{ gh }}" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",            line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway_port }}" }
+    - { regexp: "^TYK_DB_REDISHOST=",                             line: "TYK_DB_REDISHOST={{ rh }}" }
+    - { regexp: "^TYK_DB_REDISPORT=",                             line: "TYK_DB_REDISPORT={{ redis_port }}" }
+    - { regexp: "^TYK_DB_ENABLECLUSTER=",                         line: "TYK_DB_ENABLECLUSTER={{ redis_enable_cluster }}" }
+    - { regexp: "^TYK_DB_REDISUSESSL=",                           line: "TYK_DB_REDISUSESSL={{ redis_enable_ssl }}" }
+    - { regexp: "^TYK_DB_PAGESIZE=",                              line: "TYK_DB_PAGESIZE=10" }
+    - { regexp: "^TYK_DB_FORCEAPIDEFAULTS=",                      line: "TYK_DB_FORCEAPIDEFAULTS=false" }
+    - { regexp: "^TYK_DB_NOTIFYONCHANGE=",                        line: "TYK_DB_NOTIFYONCHANGE=true" }
+    - { regexp: "^TYK_DB_REDISDATABASE=",                         line: "TYK_DB_REDISDATABASE=0" }
+    - { regexp: "^TYK_DB_HASHKEYS=",                              line: "TYK_DB_HASHKEYS=true" }
+    - { regexp: "^TYK_DB_EMAILBACKEND_ENABLEEMAILNOTIFICATIONS=", line: "TYK_DB_EMAILBACKEND_ENABLEEMAILNOTIFICATIONS=false" }
+    - { regexp: "^TYK_DB_EMAILBACKEND_CODE=",                     line: "TYK_DB_EMAILBACKEND_CODE=sendgrid" }
+    - { regexp: "^TYK_DB_EMAILBACKEND_SETTINGS=",                 line: "TYK_DB_EMAILBACKEND_SETTINGS=" }
+    - { regexp: "^TYK_DB_EMAILBACKEND_DEFAULTFROMEMAIL=",         line: "TYK_DB_EMAILBACKEND_DEFAULTFROMEMAIL=you@somewhere.com" }
+    - { regexp: "^TYK_DB_EMAILBACKEND_DEFAULTFROMNAME=",          line: "TYK_DB_EMAILBACKEND_DEFAULTFROMNAME=Some Person" }
+    - { regexp: "^TYK_DB_HIDELISTENPATH=",                        line: "TYK_DB_HIDELISTENPATH=false" }
+    - { regexp: "^TYK_DB_USESENTRY=",                             line: "TYK_DB_USESENTRY=false" }
+    - { regexp: "^TYK_DB_SENTRYCODE=",                            line: "TYK_DB_SENTRYCODE=" }
+    - { regexp: "^TYK_DB_SENTRYJSCODE=",                          line: "TYK_DB_SENTRYJSCODE=" }
+    - { regexp: "^TYK_DB_ENABLEMASTERKEYS=",                      line: "TYK_DB_ENABLEMASTERKEYS=false" }
+    - { regexp: "^TYK_DB_ENABLEDUPLICATESLUGS=",                  line: "TYK_DB_ENABLEDUPLICATESLUGS=true" }
+    - { regexp: "^TYK_DB_SHOWORGID=",                             line: "TYK_DB_SHOWORGID=true" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_ENABLEHOSTNAMES=",            line: "TYK_DB_HOSTCONFIG_ENABLEHOSTNAMES=true" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_DISABLEORGSLUGPREFIX=",       line: "TYK_DB_HOSTCONFIG_DISABLEORGSLUGPREFIX=true" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_PORTALROOTPATH=",             line: "TYK_DB_HOSTCONFIG_PORTALROOTPATH=/portal" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_PORTALDOMAINS=",              line: "TYK_DB_HOSTCONFIG_PORTALDOMAINS=" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_GENERATEHTTPS=",              line: "TYK_DB_HOSTCONFIG_GENERATEHTTPS=false" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_USESTRICT=",                  line: "TYK_DB_HOSTCONFIG_USESTRICT=false" }
+    - { regexp: "^TYK_DB_HTTPSERVEROPTIONS_USESSL=",              line: "TYK_DB_HTTPSERVEROPTIONS_USESSL=false" }
+    - { regexp: "^TYK_DB_HTTPSERVEROPTIONS_CERTIFICATES=",        line: "TYK_DB_HTTPSERVEROPTIONS_CERTIFICATES=" }
+    - { regexp: "^TYK_DB_HTTPSERVEROPTIONS_MINVERSION=",          line: "TYK_DB_HTTPSERVEROPTIONS_MINVERSION=0" }
+    - { regexp: "^TYK_DB_UI_LANGUAGES=",                          line: "TYK_DB_UI_LANGUAGES=Chinese:cn,English:en,Korean:ko" }
+    - { regexp: "^TYK_DB_UI_HIDEHELP=",                           line: "TYK_DB_UI_HIDEHELP=true" }
+    - { regexp: "^TYK_DB_UI_DEFAULTLANG=",                        line: "TYK_DB_UI_DEFAULTLANG=en" }
+    - { regexp: "^TYK_DB_UI_LOGINPAGE=",                          line: "TYK_DB_UI_LOGINPAGE=" }
+    - { regexp: "^TYK_DB_UI_NAV=",                                line: "TYK_DB_UI_NAV=dont_show_admin_sockets:false,hide_activity_by_api_section:false,hide_geo:false,hide_licenses_section:false,hide_logs:false,hide_tib_section:false" }
+    - { regexp: "^TYK_DB_UI_UPTIME=",                             line: "TYK_DB_UI_UPTIME=" }
+    - { regexp: "^TYK_DB_UI_PORTALSECTION=",                      line: "TYK_DB_UI_PORTALSECTION=" }
+    - { regexp: "^TYK_DB_UI_DESIGNER=",                           line: "TYK_DB_UI_DESIGNER=" }
+    - { regexp: "^TYK_DB_UI_DONTSHOWADMINSOCKETMESSAGES=",        line: "TYK_DB_UI_DONTSHOWADMINSOCKETMESSAGES=false" }
+    - { regexp: "^TYK_DB_UI_DONTALLOWLICENSEMANAGEMENT=",         line: "TYK_DB_UI_DONTALLOWLICENSEMANAGEMENT=false" }
+    - { regexp: "^TYK_DB_UI_DONTALLOWLICENSEMANAGEMENTVIEW=",     line: "TYK_DB_UI_DONTALLOWLICENSEMANAGEMENTVIEW=false" }
+    - { regexp: "^TYK_DB_HOMEDIR=",                               line: "TYK_DB_HOMEDIR=/opt/tyk-dashboard" }
+    - { regexp: "^TYK_DB_ENABLEAGGREGATELOOKUPS=",                line: "TYK_DB_ENABLEAGGREGATELOOKUPS=true" }
+    - { regexp: "^TYK_DB_AGGREGATELOOKUPCUTOFF=",                 line: "TYK_DB_AGGREGATELOOKUPCUTOFF=26/05/2016" }
+    - { regexp: "^TYK_DB_MAINTENANCEMODE=",                       line: "TYK_DB_MAINTENANCEMODE=false" }
+    - { regexp: "^TYK_DB_ALLOWEXPLICITPOLICYID=",                 line: "TYK_DB_ALLOWEXPLICITPOLICYID=true" }
+    - { regexp: "^TYK_DB_PRIVATEKEYPATH=",                        line: "TYK_DB_PRIVATEKEYPATH=" }
+    - { regexp: "^TYK_DB_NODESCHEMADIR=",                         line: "TYK_DB_NODESCHEMADIR=" }
+    - { regexp: "^TYK_DB_OAUTHREDIRECTURISEPARATOR=",             line: "TYK_DB_OAUTHREDIRECTURISEPARATOR=;" }
+    - { regexp: "^TYK_DB_STATSDCONNECTIONSTRING=",                line: "TYK_DB_STATSDCONNECTIONSTRING=" }
+    - { regexp: "^TYK_DB_STATSDPREFIX=",                          line: "TYK_DB_STATSDPREFIX=" }
 
 - name: Enable tyk-dashboard
   service:
