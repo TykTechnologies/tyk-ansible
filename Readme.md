@@ -48,7 +48,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 ## Variables
 - `vars/mongodb.yaml`
 
-| Variable | default value | Comments |
+| Variable | Default | Comments |
 | --------- | :---------: | --------- |
 | bind_ip | `0.0.0.0` | Binding address of MongoDB |
 | mongodb_version | `4.4` | MongoDB version |
@@ -57,7 +57,7 @@ Read more about MongoDB configuration [here](https://github.com/ansible-collecti
 
 - `vars/redis.yaml`
 
-| Variable | default value | Comments |
+| Variable | Default | Comments |
 | --------- | :---------: | --------- |
 | redis_bind_interface | `0.0.0.0` | Binding address of Redis |
 
