@@ -2,3 +2,4 @@
 **/.DS_Store
 **/hosts.yaml
 **/ansible.cfg
+**/tyk.yaml

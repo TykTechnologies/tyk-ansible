@@ -31,55 +31,29 @@
     src: "../files/{{ package_def_file }}"
     dest: "{{ package_def_folder }}/{{ package_def_file }}"
 
-- name: Install tyk-gateway
-  package:
-    name: tyk-gateway
-    state: present
-    update_cache: yes
-
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway PRO version
   vars:
-    dh: "{{ hostvars['dashboard']['ansible_host'] if dashboard_host == None else dashboard_host }}"
+    dh: "{{ hostvars['dashboard']['ansible_host'] if dash.service.host == None else dash.service.host }}"
   lineinfile:
     dest: /etc/sysconfig/tyk-gateway
     create: true
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_GW_NODESECRET=",                                      line: "TYK_GW_NODESECRET={{ tyk_shared_secret }}" }
-    - { regexp: "^TYK_GW_LISTENPORT=",                                      line: "TYK_GW_LISTENPORT={{ gateway_port }}" }
-    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",                 line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}" }
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=",               line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}" }
-    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",                           line: "TYK_GW_POLICIES_POLICYSOURCE=service" }
-    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",                       line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
-    - { regexp: "^TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=",                  line: "TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=true" }
-    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                                 line: "TYK_GW_USEDBAPPCONFIGS=true" }
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=",                line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=false" }
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",                           line: "TYK_GW_DBAPPCONFOPTIONS_TAGS=" }
-    - { regexp: "^TYK_GW_DISABLEDASHBOARDZEROCONF=",                        line: "TYK_GW_DISABLEDASHBOARDZEROCONF=false" }
-    - { regexp: "^TYK_GW_ENABLEJSVM=",                                      line: "TYK_GW_ENABLEJSVM=true" }
-    - { regexp: "^TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=",                line: "TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=false" }
-    - { regexp: "^TYK_GW_COPROCESSOPTIONS_COPROCESSGRPCSERVER=",            line: "TYK_GW_COPROCESSOPTIONS_COPROCESSGRPCSERVER=tcp://localhost:5555" }
-    - { regexp: "^TYK_GW_HOSTNAME=",                                        line: "TYK_GW_HOSTNAME=localhost" }
-    - { regexp: "^TYK_GW_ENABLECUSTOMDOMAINS=",                             line: "TYK_GW_ENABLECUSTOMDOMAINS=true" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_READTIMEOUT=",                   line: "TYK_GW_HTTPSERVEROPTIONS_READTIMEOUT=0" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_WRITETIMEOUT=",                  line: "TYK_GW_HTTPSERVEROPTIONS_WRITETIMEOUT=0" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_USESSL=",                        line: "TYK_GW_HTTPSERVEROPTIONS_USESSL=false" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_USELE_SSL=",                     line: "TYK_GW_HTTPSERVEROPTIONS_USELE_SSL=false" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_ENABLEWEBSOCKETS=",              line: "TYK_GW_HTTPSERVEROPTIONS_ENABLEWEBSOCKETS=true" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_CERTIFICATES=",                  line: "TYK_GW_HTTPSERVEROPTIONS_CERTIFICATES=" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_SERVERNAME=",                    line: "TYK_GW_HTTPSERVEROPTIONS_SERVERNAME=" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_MINVERSION=",                    line: "TYK_GW_HTTPSERVEROPTIONS_MINVERSION=0" }
-    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_FLUSHINTERVAL=",                 line: "TYK_GW_HTTPSERVEROPTIONS_FLUSHINTERVAL=0" }
-    - { regexp: "^TYK_GW_ENABLEANALYTICS=",                                 line: "TYK_GW_ENABLEANALYTICS=true" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",                            line: "TYK_GW_ANALYTICSCONFIG_TYPE=mongo" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_ENABLEDETAILEDRECORDING=",         line: "TYK_GW_ANALYTICSCONFIG_ENABLEDETAILEDRECORDING=false" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_ENABLEGEOIP=",                     line: "TYK_GW_ANALYTICSCONFIG_ENABLEGEOIP=false" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_GEOIPDBLOCATION=",                 line: "TYK_GW_ANALYTICSCONFIG_GEOIPDBLOCATION=./GeoLite2-City.mmdb" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_ENABLED=",           line: "TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_ENABLED=true" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_NORMALISEUUIDS=",    line: "TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_NORMALISEUUIDS=true" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_NORMALISENUMBERS=",  line: "TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_NORMALISENUMBERS=true" }
-    - { regexp: "^TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_CUSTOM=",            line: "TYK_GW_ANALYTICSCONFIG_NORMALISEURLS_CUSTOM=" }
+    - { regexp: "^TYK_GW_NODESECRET=",                       line: "TYK_GW_NODESECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",  line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=",line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_USESSL=",         line: "TYK_GW_HTTPSERVEROPTIONS_USESSL={{ gateway.service.tls }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",            line: "TYK_GW_POLICIES_POLICYSOURCE=service" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",        line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
+    - { regexp: "^TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=",   line: "TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=True" }
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                  line: "TYK_GW_USEDBAPPCONFIGS=True" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=", line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED={{ gateway.sharding.enabled }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",            line: "TYK_GW_DBAPPCONFOPTIONS_TAGS={{ gateway.sharding.tags }}" }
+    - { regexp: "^TYK_GW_ENABLEJSVM=",                       line: "TYK_GW_ENABLEJSVM=True" }
+    - { regexp: "^TYK_GW_ENABLECUSTOMDOMAINS=",              line: "TYK_GW_ENABLECUSTOMDOMAINS=True" }
+    - { regexp: "^TYK_GW_ENABLEANALYTICS=",                  line: "TYK_GW_ENABLEANALYTICS=True" }
+    - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",             line: "TYK_GW_ANALYTICSCONFIG_TYPE=mongo" }
   when: "'tyk-ce' not in ansible_run_tags"
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway for CE version
@@ -89,39 +63,37 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",           line: "TYK_GW_USEDBAPPCONFIGS=false" }
-    - { regexp: "^TYK_GW_ENABLEANALYTICS=",           line: "TYK_GW_ENABLEANALYTICS=false" }
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",           line: "TYK_GW_USEDBAPPCONFIGS=False" }
     - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",     line: "TYK_GW_POLICIES_POLICYSOURCE=file" }
     - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=", line: "TYK_GW_POLICIES_POLICYRECORDNAME=/opt/tyk-gateway/policies/policies.json" }
   when: "'tyk-ce' in ansible_run_tags"
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway
   vars:
-    rh: "{{ hostvars['redis']['ansible_host'] if redis_host == None else redis_host }}"
+    rh: "{{ hostvars['redis']['ansible_host'] if redis.host == None else redis.host }}"
   lineinfile:
     dest: /etc/sysconfig/tyk-gateway
     create: true
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_GW_SECRET=",                  line: "TYK_GW_SECRET={{ tyk_shared_secret }}" }
-    - { regexp: "^TYK_GW_LISTENPORT=",              line: "TYK_GW_LISTENPORT={{ gateway_port }}" }
-    - { regexp: "^TYK_GW_STORAGE_TYPE=",            line: "TYK_GW_STORAGE_TYPE=redis" }
-    - { regexp: "^TYK_GW_STORAGE_HOST=",            line: "TYK_GW_STORAGE_HOST={{ rh }}" }
-    - { regexp: "^TYK_GW_STORAGE_PORT=",            line: "TYK_GW_STORAGE_PORT={{ redis_port }}" }
-    - { regexp: "^TYK_GW_STORAGE_HOSTS=",           line: "TYK_GW_STORAGE_HOSTS=" }
-    - { regexp: "^TYK_GW_STORAGE_USERNAME=",        line: "TYK_GW_STORAGE_USERNAME=" }
-    - { regexp: "^TYK_GW_STORAGE_PASSWORD=",        line: "TYK_GW_STORAGE_PASSWORD=" }
-    - { regexp: "^TYK_GW_STORAGE_DATABASE=",        line: "TYK_GW_STORAGE_DATABASE=0" }
-    - { regexp: "^TYK_GW_STORAGE_MAXIDLE=",         line: "TYK_GW_STORAGE_MAXIDLE=3000" }
-    - { regexp: "^TYK_GW_STORAGE_MAXACTIVE=",       line: "TYK_GW_STORAGE_MAXACTIVE=5000" }
-    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=",   line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis_enable_cluster }}" }
-    - { regexp: "^TYK_GW_STORAGE_USESSL=",          line: "TYK_GW_STORAGE_USESSL={{ redis_enable_ssl }}" }
-    - { regexp: "^TYK_GW_TEMPLATEPATH=",            line: "TYK_GW_TEMPLATEPATH=/opt/tyk-gateway/templates" }
-    - { regexp: "^TYK_GW_TYKJSPATH=",               line: "TYK_GW_TYKJSPATH=/opt/tyk-gateway/js/tyk.js" }
-    - { regexp: "^TYK_GW_MIDDLEWAREPATH=",          line: "TYK_GW_MIDDLEWAREPATH=/opt/tyk-gateway/middleware/" }
-    - { regexp: "^TYK_GW_APPPATH=",                 line: "TYK_GW_APPPATH=/opt/tyk-gateway/apps/" }
-    - { regexp: "^TYK_GW_HASHKEYFUNCTION=",         line: "TYK_GW_HASHKEYFUNCTION=murmur64" }
+    - { regexp: "^TYK_GW_SECRET=",                line: "TYK_GW_SECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_LISTENPORT=",            line: "TYK_GW_LISTENPORT={{ gateway.service.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_TYPE=",          line: "TYK_GW_STORAGE_TYPE=redis" }
+    - { regexp: "^TYK_GW_STORAGE_HOST=",          line: "TYK_GW_STORAGE_HOST={{ rh }}" }
+    - { regexp: "^TYK_GW_STORAGE_PORT=",          line: "TYK_GW_STORAGE_PORT={{ redis.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_PASSWORD=",      line: "TYK_GW_STORAGE_PASSWORD={{ redis.pass }}" }
+    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=", line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis.enableCluster }}" }
+    - { regexp: "^TYK_GW_STORAGE_USESSL=",        line: "TYK_GW_STORAGE_USESSL={{ redis.tls }}" }
+    - { regexp: "^TYK_GW_STORAGE_DATABASE=",      line: "TYK_GW_STORAGE_DATABASE={{ redis.storage.database }}" }
+    - { regexp: "^TYK_GW_HASHKEYFUNCTION=",       line: "TYK_GW_HASHKEYFUNCTION=murmur64" }
+    - { regexp: "^TYK_GW_ALLOWINSECURECONFIGS=",  line: "TYK_GW_ALLOWINSECURECONFIGS=True" }
+
+- name: Install tyk-gateway
+  package:
+    name: tyk-gateway
+    state: present
+    update_cache: yes
 
 - name: Enable tyk-gateway
   service:

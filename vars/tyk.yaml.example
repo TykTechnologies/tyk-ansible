@@ -1,0 +1,35 @@
+secrets:
+  APISecret: 352d20ee67be67f6340b4c0605b044b7
+  AdminSecret: 12345
+
+redis:
+  host:
+  port: 6379
+  pass:
+  enableCluster: False
+  storage:
+    database: 0
+  tls: False
+
+mongo:
+  host:
+  port: 27017
+  tls: False
+
+dash:
+  license:
+  service:
+    host:
+    port: 3000
+    proto: http
+    tls: False
+
+gateway:
+  service:
+    host:
+    port: 8080
+    proto: http
+    tls: False
+  sharding:
+    enabled: False
+    tags:
