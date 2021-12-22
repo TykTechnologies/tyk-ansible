@@ -31,52 +31,69 @@
     src: "../files/{{ package_def_file }}"
     dest: "{{ package_def_folder }}/{{ package_def_file }}"
 
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway PRO version
+  vars:
+    dh: "{{ hostvars['dashboard']['ansible_host'] if dash.service.host == None else dash.service.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_NODESECRET=",                       line: "TYK_GW_NODESECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",  line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=",line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_USESSL=",         line: "TYK_GW_HTTPSERVEROPTIONS_USESSL={{ gateway.service.tls }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",            line: "TYK_GW_POLICIES_POLICYSOURCE=service" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",        line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
+    - { regexp: "^TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=",   line: "TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=True" }
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                  line: "TYK_GW_USEDBAPPCONFIGS=True" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=", line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED={{ gateway.sharding.enabled }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",            line: "TYK_GW_DBAPPCONFOPTIONS_TAGS={{ gateway.sharding.tags }}" }
+    - { regexp: "^TYK_GW_ENABLEJSVM=",                       line: "TYK_GW_ENABLEJSVM=True" }
+    - { regexp: "^TYK_GW_ENABLECUSTOMDOMAINS=",              line: "TYK_GW_ENABLECUSTOMDOMAINS=True" }
+    - { regexp: "^TYK_GW_ENABLEANALYTICS=",                  line: "TYK_GW_ENABLEANALYTICS=True" }
+    - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",             line: "TYK_GW_ANALYTICSCONFIG_TYPE=mongo" }
+  when: "'tyk-ce' not in ansible_run_tags"
+
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway for CE version
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",           line: "TYK_GW_USEDBAPPCONFIGS=False" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",     line: "TYK_GW_POLICIES_POLICYSOURCE=file" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=", line: "TYK_GW_POLICIES_POLICYRECORDNAME=/opt/tyk-gateway/policies/policies.json" }
+  when: "'tyk-ce' in ansible_run_tags"
+
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway
+  vars:
+    rh: "{{ hostvars['redis']['ansible_host'] if redis.host == None else redis.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_SECRET=",                line: "TYK_GW_SECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_LISTENPORT=",            line: "TYK_GW_LISTENPORT={{ gateway.service.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_TYPE=",          line: "TYK_GW_STORAGE_TYPE=redis" }
+    - { regexp: "^TYK_GW_STORAGE_HOST=",          line: "TYK_GW_STORAGE_HOST={{ rh }}" }
+    - { regexp: "^TYK_GW_STORAGE_PORT=",          line: "TYK_GW_STORAGE_PORT={{ redis.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_PASSWORD=",      line: "TYK_GW_STORAGE_PASSWORD={{ redis.pass }}" }
+    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=", line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis.enableCluster }}" }
+    - { regexp: "^TYK_GW_STORAGE_USESSL=",        line: "TYK_GW_STORAGE_USESSL={{ redis.tls }}" }
+    - { regexp: "^TYK_GW_STORAGE_DATABASE=",      line: "TYK_GW_STORAGE_DATABASE={{ redis.storage.database }}" }
+    - { regexp: "^TYK_GW_HASHKEYFUNCTION=",       line: "TYK_GW_HASHKEYFUNCTION=murmur64" }
+    - { regexp: "^TYK_GW_ALLOWINSECURECONFIGS=",  line: "TYK_GW_ALLOWINSECURECONFIGS=True" }
+
 - name: Install tyk-gateway
   package:
     name: tyk-gateway
     state: present
     update_cache: yes
-
-- name: Copy tyk-gateway config
-  template:
-    src: ../files/tyk.conf
-    dest: /opt/tyk-gateway/tyk.conf
-  when: "'tyk-ce' not in ansible_run_tags"
-
-- name: Copy tyk-gateway CE config
-  template:
-    src: ../files/tyk_ce.conf
-    dest: /opt/tyk-gateway/tyk.conf
-  when: "'tyk-ce' in ansible_run_tags"
-
-- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-gateway
-  vars:
-    rh: "{{ hostvars['redis']['ansible_host'] if redis_host == None else redis_host }}"
-
-  lineinfile:
-    dest: /etc/sysconfig/tyk-gateway
-    create: true
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: "^TYK_GW_LISTENPORT=",            line: "TYK_GW_LISTENPORT={{ gateway_port }}"}
-    - { regexp: "^TYK_GW_STORAGE_HOST=",          line: "TYK_GW_STORAGE_HOST={{ rh }}"}
-    - { regexp: "^TYK_GW_STORAGE_PORT=",          line: "TYK_GW_STORAGE_PORT={{ redis_port }}"}
-    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=", line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis_enable_cluster }}"}
-    - { regexp: "^TYK_GW_STORAGE_USESSL=",        line: "TYK_GW_STORAGE_USESSL={{ redis_enable_ssl }}"}
-
-- name: Inject none-CE Tyk environment varibales into /etc/sysconfig/tyk-gateway
-  vars:
-    dh: "{{ hostvars['dashboard']['ansible_host'] if dashboard_host == None else dashboard_host }}"
-  lineinfile:
-    dest: /etc/sysconfig/tyk-gateway
-    create: true
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",   line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}"}
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=", line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dashboard_protocol }}://{{ dh }}:{{ dashboard_port }}"}
-  when: "'tyk-ce' not in ansible_run_tags"
 
 - name: Enable tyk-gateway
   service:

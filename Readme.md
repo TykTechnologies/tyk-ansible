@@ -67,15 +67,25 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
-| dashboard_protocol | `http` | Dashboard server protocol |
-| dashboard_host | | Dashboard server host if different than the hosts url |
-| dashboard_port | `3000` | Dashboard server listening port |
-| gateway_protocol | `http` | Gateway server protocol |
-| gateway_host | | Gateway server host if different than the hosts url |
-| gateway_port | `8080` | Gateway server listening port |
-| redis_host | | Redis server host if different than the hosts url |
-| redis_port | `6379` | Redis server listening port |
-| redis_enable_cluster | `false` | Enable if redis is running in cluster mode |
-| redis_enable_ssl | `false` | Enable if redis connection is secured with SSL |
-| mongodb_host | | MongoDB server host if different than the hosts url |
-| mongodb_port | `27017` | MongoDB server listening port |
+| secrets.APISecret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
+| secrets.AdminSecret | `12345` | Admin secret |
+| redis.host |  | Redis server host if different than the hosts url |
+| redis.port | `6379` | Redis server listening port |
+| redis.pass |  | Redis server password |
+| redis.enableCluster | `false` | Enable if redis is running in cluster mode |
+| redis.storage.database | `0` | Redis server database |
+| redis.tls | `false` | Enable if redis connection is secured with SSL |
+| mongo.host |  | MongoDB server host if different than the hosts url |
+| mongo.port | `27017` | MongoDB server listening port  |
+| mongo.tls | `false` | Enable if mongo connection is secured with SSL |
+| dash.license | | Dashboard license|
+| dash.service.host | | Dashboard server host if different than the hosts url |
+| dash.service.port | `3000` | Dashboard server listening port |
+| dash.service.proto | `http` | Dashboard server protocol |
+| dash.service.tls | `false` | Set to `true` if you want the Dashboard to run with SSL |
+| dash.service.host | | Gateway server host if different than the hosts url |
+| dash.service.port | `8080` | Gateway server listening port |
+| dash.service.proto | `http` | Gateway server protocol |
+| dash.service.tls | `false` | Set to `true` if you want the Gateway to run with SSL |
+| dash.sharding.enabled | `false` | Set to `true` if you want the Gateway to run in sharded mode |
+| dash.sharding.tags | | Tags that will be loaded on the current Gateway |
