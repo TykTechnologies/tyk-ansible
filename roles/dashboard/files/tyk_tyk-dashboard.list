@@ -1,2 +1,2 @@
-deb https://packagecloud.io/tyk/tyk-dashboard/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
-deb-src https://packagecloud.io/tyk/tyk-dashboard/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
+deb https://packagecloud.io/tyk/tyk-dashboard-unstable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
+deb-src https://packagecloud.io/tyk/tyk-dashboard-unstable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
