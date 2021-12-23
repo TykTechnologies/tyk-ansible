@@ -23,6 +23,8 @@ dash:
     port: 3000
     proto: http
     tls: False
+  storage:
+    type: mongo
 
 gateway:
   service:

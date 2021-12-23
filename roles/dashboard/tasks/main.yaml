@@ -49,7 +49,8 @@
     - { regexp: "^TYK_DB_TYKAPI_SECRET=",                   line: "TYK_DB_TYKAPI_SECRET={{ secrets.APISecret }}" }
     - { regexp: "^TYK_DB_ADMINSECRET=",                     line: "TYK_DB_ADMINSECRET={{ secrets.AdminSecret }}" }
     - { regexp: "^TYK_DB_NODESECRET=",                      line: "TYK_DB_NODESECRET={{ secrets.APISecret }}" }
-    - { regexp: "^TYK_DB_MONGOURL=",                        line: "TYK_DB_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics" }
+    - { regexp: "^TYK_DB_STORAGE_MAIN_TYPE=",               line: "TYK_DB_STORAGE_MAIN_TYPE={{ dash.storage.type }}" }
+    - { regexp: "^TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=",   line: "TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics" }
     - { regexp: "^TYK_DB_MONGOUSESSL=",                     line: "TYK_DB_MONGOUSESSL={{ mongo.tls }}" }
     - { regexp: "^TYK_DB_HOSTCONFIG_HOSTNAME=",             line: "TYK_DB_HOSTCONFIG_HOSTNAME={{ gh }}" }
     - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",      line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway.service.port }}" }
