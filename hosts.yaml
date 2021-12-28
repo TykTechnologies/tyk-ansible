@@ -1,0 +1,26 @@
+all:
+  hosts:
+    redis:
+      ansible_host: ec2-35-88-114-204.us-west-2.compute.amazonaws.com
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: ./zaid.pem
+    mongodb:
+      ansible_host: host
+      ansible_user: user
+      ansible_ssh_private_key_file: ./secret.pem
+    pgsql:
+      ansible_host: ec2-34-214-41-116.us-west-2.compute.amazonaws.com
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ./zaid.pem
+    dashboard:
+      ansible_host: ec2-54-202-235-61.us-west-2.compute.amazonaws.com
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ./zaid.pem
+    gateway:
+      ansible_host: ec2-35-88-114-204.us-west-2.compute.amazonaws.com
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: ./zaid.pem
+    pump:
+      ansible_host: ec2-35-88-114-204.us-west-2.compute.amazonaws.com
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: ./zaid.pem

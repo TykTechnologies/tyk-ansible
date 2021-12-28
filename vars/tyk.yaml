@@ -1,0 +1,50 @@
+secrets:
+  APISecret: 352d20ee67be67f6340b4c0605b044b7
+  AdminSecret: 12345
+
+redis:
+  host:
+  port: 6379
+  pass:
+  enableCluster: False
+  storage:
+    database: 0
+  tls: False
+
+mongo:
+  host:
+  port: 27017
+  tls: False
+
+pgsql:
+  host:
+  port: 5432
+
+dash:
+  license: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGxvd2VkX25vZGVzIjoiOTk0NTc1NzMtMmNhMC00M2IxLTZjOWItZWQxYzQzZWVjNDhkLGZmNzA1NGRiLTBiZTctNDcxMS01YzIwLWJhNGFhZjljZWZiYSxmNGE5MDg3Ni03MzdlLTQ0MjItNDNkOC04MTMzNjY5MWYwODMsMDZjODllZjItMjI2ZC00OGVhLTYyZmUtOTFlNDY2Yjg2Yzg4LDc4NjFmNmYyLWUxMDctNGRmNy00ZjA3LTU2Nzk3YTEzZjU1MCxhYjViMjMxYy1lZjIwLTQ4MzgtNjdmMS1kMWI3NzVhMzZjNWUsM2Q3MGMxZWMtMDQ0Ny00MjYyLTZiYjctZjIzZTBmMmI3MjA2LDM5YTg2ZTBmLWM5ZDQtNDE5Zi02ZDIzLTJmOGQ0OTQ1M2FmZCw3NzBhZGNlMi0zNDE3LTQ2NDMtNGRjZS02ZmQ4ODc3MjM0ZjcsZjE4N2Q0ZWYtOTY0Ni00ZWYwLTZmZmUtNDNkZjkyMzQyYmY3IiwiZXhwIjoxNjQyODEwNzIxLCJpYXQiOjE2NDAyMTg3MjEsIm93bmVyIjoiNTc3OTcxMTk0NWY5MmU2Njg5MDAwMTI3Iiwic2NvcGUiOiJtdWx0aV90ZWFtLHJiYWMsZ3JhcGgsZmVkZXJhdGlvbiIsInYiOiIyIn0.s5wvyXCpUuYMVOuX6-5bYr_r2vmP-SUAjVPi7S1m3vBCdrzfcQYQPXHLCMG4aZjkSJgRYHOZO_7VrfA8zoxoQWW9jAtVAoExfZec-lcxKTU7V7cnWNGSof2UCMpDTXhx7H4KclMaWXC6rK0ZCylnzC0j0GXXcimodSujoHseWqYXC9Ut__4qpY92RxApnDZjXfpVYE4fuF22Z_OrM0jL2Fi02g2zUOKlhIQhpGMY9OnFYD69YEaoEe3nB8OcxaS7Kk4613JfKS-ljTktSpqKFpLTNsgEBJAgFzyqTSnvbvYAgv4itY5QNuSdm9bzT6pTsIlAfllJj0bO3lntVHg5Kw
+  service:
+    host:
+    port: 3000
+    proto: http
+    tls: False
+  storage:
+    type: postgres
+
+gateway:
+  service:
+    host:
+    port: 8080
+    proto: http
+    tls: False
+  sharding:
+    enabled: False
+    tags:
+  rpc:
+    connString: "respectable-parchment-hyb.aws-usw2.cloud-ara.tyk.io:443"
+    useSSL: true
+    sslInsecureSkipVerify: true
+    # orgID of your dashboard user
+    rpcKey: "609977c2dca2b60001876ebb"
+    # API key of your dashboard user
+    apiKey: "ac7f6c88ceeb45ba61e9cc582004be41"
+    groupId: "edge"
