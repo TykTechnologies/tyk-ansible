@@ -7,8 +7,8 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 ## Getting Started
 1. Clone repo and navigate to the repo directory.
 2. Run initalization script to initialize environment `sh scripts/init.sh`.
-3. Modify `hosts.yaml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
-4. Run `ansible-playbook playbook.yaml` to install Tyk.
+3. Modify `hosts.yml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
+4. Run `ansible-playbook playbook.yml` to install Tyk.
 
 ## Installation flavors
 Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command. Not specifying a tag will install **Tyk Pro** as well as **Redis** and **MongoDB**.
@@ -46,7 +46,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | ❌️ | Untested / Not supported by tool |
 
 ## Variables
-- `vars/mongodb.yaml`
+- `vars/mongodb.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -55,7 +55,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 
 Read more about MongoDB configuration [here](https://github.com/ansible-collections/community.mongodb).
 
-- `vars/redis.yaml`
+- `vars/redis.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -63,7 +63,7 @@ Read more about MongoDB configuration [here](https://github.com/ansible-collecti
 
 Read more about Redis configuration [here](https://github.com/geerlingguy/ansible-role-redis).
 
-- `vars/tyk.yaml`
+- `vars/tyk.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
