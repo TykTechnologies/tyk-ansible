@@ -2,7 +2,7 @@
 - hosts: redis
   become: true
   vars_files:
-  - ./vars/redis.yaml
+    - ./vars/redis.yaml
 
   roles:
     - redis
@@ -14,7 +14,7 @@
 - hosts: mongodb
   become: true
   vars_files:
-  - ./vars/mongodb.yaml
+    - ./vars/mongodb.yaml
 
   roles:
     - community.mongodb.mongodb_repository
@@ -25,10 +25,22 @@
   tags:
     - mongodb
 
+- hosts: pgsql
+  become: true
+  vars_files:
+    - ./vars/pgsql.yaml
+
+  roles:
+    - geerlingguy.postgresql
+
+  tags:
+    - pgsql
+
 - hosts: dashboard
   become: true
   vars_files:
-  - ./vars/tyk.yaml
+    - ./vars/tyk.yaml
+    - ./vars/pgsql.yaml
 
   roles:
     - dashboard
@@ -54,6 +66,7 @@
   become: true
   vars_files:
     - ./vars/tyk.yaml
+    - ./vars/pgsql.yaml
 
   roles:
     - pump

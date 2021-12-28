@@ -33,7 +33,6 @@
 
 - name: Inject Tyk environment varibales into /etc/sysconfig/tyk-pump
   vars:
-    mh: "{{ hostvars['mongodb']['ansible_host'] if mongo.host == None else mongo.host }}"
     rh: "{{ hostvars['redis']['ansible_host'] if redis.host == None else redis.host }}"
   lineinfile:
     dest: /etc/sysconfig/tyk-pump
@@ -41,35 +40,92 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_PMP_OMITCONFIGFILE=",                               line: "TYK_PMP_OMITCONFIGFILE=True"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGETYPE=",                         line: "TYK_PMP_ANALYTICSSTORAGETYPE=redis"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=",                  line: "TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=redis"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOST",                   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOST={{ rh }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PORT",                   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PORT={{ redis.port }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER=",         line: "TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER={{ redis.enableCluster }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",           line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis.tls }}"}
-    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE=",              line: "TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE={{ redis.storage.database }}" }
-    - { regexp: "^TYK_PMP_PUMPS_MONGO_TYPE=",                             line: "TYK_PMP_PUMPS_MONGO_TYPE=mongo"}
-    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=",              line: "TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=tyk_analytics"}
-    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOURL=",                    line: "TYK_PMP_PUMPS_MONGO_META_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics"}
-    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOUSESSL=",                 line: "TYK_PMP_PUMPS_MONGO_META_MONGOUSESSL={{ mongo.tls }}"}
+    - { regexp: "^TYK_PMP_OMITCONFIGFILE=",                       line: "TYK_PMP_OMITCONFIGFILE=True"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGETYPE=",                 line: "TYK_PMP_ANALYTICSSTORAGETYPE=redis"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=",          line: "TYK_PMP_ANALYTICSSTORAGECONFIG_TYPE=redis"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_HOST",           line: "TYK_PMP_ANALYTICSSTORAGECONFIG_HOST={{ rh }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_PORT",           line: "TYK_PMP_ANALYTICSSTORAGECONFIG_PORT={{ redis.port }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER=", line: "TYK_PMP_ANALYTICSSTORAGECONFIG_ENABLECLUSTER={{ redis.enableCluster }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis.tls }}"}
+    - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE=",      line: "TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE={{ redis.storage.database }}" }
+    - { regexp: "^TYK_PMP_DONTPURGEUPTIMEDATA=",                  line: "TYK_PMP_DONTPURGEUPTIMEDATA=False"}
+
+- name: Inject Mongo URL environment varibale into /etc/sysconfig/tyk-pump
+  vars:
+    mh: "{{ hostvars['mongodb']['ansible_host'] if mongo.host == None else mongo.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-pump
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_TYPE=",                line: "TYK_PMP_PUMPS_MONGO_TYPE=mongo"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=", line: "TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=tyk_analytics"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOURL=",       line: "TYK_PMP_PUMPS_MONGO_META_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics"}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOUSESSL=",    line: "TYK_PMP_PUMPS_MONGO_META_MONGOUSESSL={{ mongo.tls }}"}
+
     - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_TYPE=",                    line: "TYK_PMP_PUMPS_MONGOAGGREGATE_TYPE=mongo-pump-aggregate"}
     - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOURL=",           line: "TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics"}
     - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOUSESSL=",        line: "TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOUSESSL={{ mongo.tls }}"}
     - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_USEMIXEDCOLLECTION=", line: "TYK_PMP_PUMPS_MONGOAGGREGATE_META_USEMIXEDCOLLECTION=True"}
-    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=",              line: "TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=tyk_uptime_analytics"}
-    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=",                    line: "TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics"}
-    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOUSESSL=",                 line: "TYK_PMP_UPTIMEPUMPCONFIG_MONGOUSESSL={{ mongo.tls }}"}
-    - { regexp: "^TYK_PMP_DONTPURGEUPTIMEDATA=",                          line: "TYK_PMP_DONTPURGEUPTIMEDATA=False"}
+
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=", line: "TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=tyk_uptime_analytics"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=",       line: "TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics"}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOUSESSL=",    line: "TYK_PMP_UPTIMEPUMPCONFIG_MONGOUSESSL={{ mongo.tls }}"}
+
+    - { regexp: "^TYK_PMP_PUMPS_SQL_TYPE=",                  line: "" }
+    - { regexp: "^TYK_PMP_PUMPS_SQL_META_TYPE=",             line: "" }
+    - { regexp: "^TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=", line: "" }
+
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_TYPE=",                  line: "" }
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_TYPE=",             line: "" }
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=", line: "" }
+
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_UPTIMETYPE=",       line: "" }
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_TYPE=",             line: "" }
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=", line: "" }
+  when:
+    dash.storage.type == "mongo"
+
+- name: Inject PGSQL connection environment varibale into /etc/sysconfig/tyk-pump
+  vars:
+    ph: "{{ hostvars['pgsql']['ansible_host'] if pgsql.host == None else pgsql.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-pump
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_TYPE=",                line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_COLLECTIONNAME=", line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOURL=",       line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGO_META_MONGOUSESSL=",    line: ""}
+
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_TYPE=",                    line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOURL=",           line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_MONGOUSESSL=",        line: ""}
+    - { regexp: "^TYK_PMP_PUMPS_MONGOAGGREGATE_META_USEMIXEDCOLLECTION=", line: ""}
+
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_COLLECTIONNAME=", line: ""}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOURL=",       line: ""}
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_MONGOUSESSL=",    line: ""}
+
+    - { regexp: "^TYK_PMP_PUMPS_SQL_TYPE=",                  line: "TYK_PMP_PUMPS_SQL_TYPE=sql" }
+    - { regexp: "^TYK_PMP_PUMPS_SQL_META_TYPE=",             line: "TYK_PMP_PUMPS_SQL_META_TYPE=postgres" }
+    - { regexp: "^TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_TYPE=",                  line: "TYK_PMP_PUMPS_SQLAGGREGATE_TYPE=sql" }
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_TYPE=",             line: "TYK_PMP_PUMPS_SQLAGGREGATE_META_TYPE=postgres" }
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_UPTIMETYPE=",       line: "TYK_PMP_UPTIMEPUMPCONFIG_UPTIMETYPE=sql" }
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_TYPE=",             line: "TYK_PMP_UPTIMEPUMPCONFIG_TYPE=postgres" }
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=", line: "TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+  when:
+    dash.storage.type == "postgres"
 
 - name: Install tyk-pump
   package:
     name: tyk-pump
     state: present
     update_cache: yes
-
-- name: Enable tyk-pump
-  service:
-    name: tyk-pump
-    state: started
-    enabled: yes

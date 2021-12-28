@@ -123,12 +123,6 @@
     state: present
     update_cache: yes
 
-- name: Enable tyk-gateway
-  service:
-    name: tyk-gateway
-    state: started
-    enabled: yes
-
 - name: Check if Python 3.7 is installed
   stat:
     path: /usr/local/bin/python3.7
