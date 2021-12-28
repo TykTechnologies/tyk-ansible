@@ -60,6 +60,6 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "^TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=", line: "TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+    - { regexp: "^TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=", line: "TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port={{ pgsql.port }} database={{ postgresql_databases[0].name }}" }
   when:
     dash.storage.type == "postgres"

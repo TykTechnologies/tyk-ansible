@@ -55,7 +55,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | mongo.port | `27017` | MongoDB server listening port  |
 | mongo.tls | `false` | Enable if mongo connection is secured with SSL |
 | pgsql.host |  | PGSQL server host if different than the hosts url |
-| pgsql.port | `27017` | PGSQL server listening port  |
+| pgsql.port | `5432` | PGSQL server listening port  |
 | pgsql.tls | `false` | Enable if pgsql connection is secured with SSL |
 | dash.license | | Dashboard license|
 | dash.service.host | | Dashboard server host if different than the hosts url |

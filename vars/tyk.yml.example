@@ -16,6 +16,10 @@ mongo:
   port: 27017
   tls: False
 
+pgsql:
+  host:
+  port: 5432
+
 dash:
   license:
   service:

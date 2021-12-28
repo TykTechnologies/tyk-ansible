@@ -80,14 +80,14 @@
 
     - { regexp: "^TYK_PMP_PUMPS_SQL_TYPE=",                  line: "TYK_PMP_PUMPS_SQL_TYPE=sql" }
     - { regexp: "^TYK_PMP_PUMPS_SQL_META_TYPE=",             line: "TYK_PMP_PUMPS_SQL_META_TYPE=postgres" }
-    - { regexp: "^TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+    - { regexp: "^TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQL_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port={{ pgsql.port }} database={{ postgresql_databases[0].name }}" }
 
     - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_TYPE=",                  line: "TYK_PMP_PUMPS_SQLAGGREGATE_TYPE=sql" }
     - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_TYPE=",             line: "TYK_PMP_PUMPS_SQLAGGREGATE_META_TYPE=postgres" }
-    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+    - { regexp: "^TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=", line: "TYK_PMP_PUMPS_SQLAGGREGATE_META_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port={{ pgsql.port }} database={{ postgresql_databases[0].name }}" }
 
     - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_UPTIMETYPE=",       line: "TYK_PMP_UPTIMEPUMPCONFIG_UPTIMETYPE=sql" }
     - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_TYPE=",             line: "TYK_PMP_UPTIMEPUMPCONFIG_TYPE=postgres" }
-    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=", line: "TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+    - { regexp: "^TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=", line: "TYK_PMP_UPTIMEPUMPCONFIG_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port={{ pgsql.port }} database={{ postgresql_databases[0].name }}" }
   when:
     dash.storage.type == "postgres"
