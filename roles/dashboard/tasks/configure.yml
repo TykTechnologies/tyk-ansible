@@ -1,0 +1,65 @@
+---
+- name: Common environment varibales
+  vars:
+    gh: "{{ hostvars['gateway']['ansible_host'] if gateway.service.host == None else gateway.service.host }}"
+    rh: "{{ hostvars['redis']['ansible_host'] if redis.host == None else redis.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-dashboard
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_DB_LICENSEKEY=",                      line: "TYK_DB_LICENSEKEY={{ dash.license }}" }
+    - { regexp: "^TYK_DB_LISTENPORT=",                      line: "TYK_DB_LISTENPORT={{ dash.service.port }}" }
+    - { regexp: "^TYK_DB_TYKAPI_HOST=",                     line: "TYK_DB_TYKAPI_HOST={{ gateway.service.proto }}://{{ gh }}" }
+    - { regexp: "^TYK_DB_TYKAPI_PORT=",                     line: "TYK_DB_TYKAPI_PORT={{ gateway.service.port }}" }
+    - { regexp: "^TYK_DB_TYKAPI_SECRET=",                   line: "TYK_DB_TYKAPI_SECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_DB_ADMINSECRET=",                     line: "TYK_DB_ADMINSECRET={{ secrets.AdminSecret }}" }
+    - { regexp: "^TYK_DB_NODESECRET=",                      line: "TYK_DB_NODESECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_DB_STORAGE_MAIN_TYPE=",               line: "TYK_DB_STORAGE_MAIN_TYPE={{ dash.storage.type }}" }
+    - { regexp: "^TYK_DB_MONGOUSESSL=",                     line: "TYK_DB_MONGOUSESSL={{ mongo.tls }}" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_HOSTNAME=",             line: "TYK_DB_HOSTCONFIG_HOSTNAME={{ gh }}" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME=",      line: "TYK_DB_HOSTCONFIG_GATEWAYHOSTNAME={{ gh }}:{{ gateway.service.port }}" }
+    - { regexp: "^TYK_DB_REDISHOST=",                       line: "TYK_DB_REDISHOST={{ rh }}" }
+    - { regexp: "^TYK_DB_REDISPORT=",                       line: "TYK_DB_REDISPORT={{ redis.port }}" }
+    - { regexp: "^TYK_DB_REDISPASSWORD=",                   line: "TYK_DB_REDISPASSWORD={{ redis.pass }}" }
+    - { regexp: "^TYK_DB_ENABLECLUSTER=",                   line: "TYK_DB_ENABLECLUSTER={{ redis.enableCluster }}" }
+    - { regexp: "^TYK_DB_REDISUSESSL=",                     line: "TYK_DB_REDISUSESSL={{ redis.tls }}" }
+    - { regexp: "^TYK_DB_REDISDATABASE=",                   line: "TYK_DB_REDISDATABASE={{ redis.storage.database }}" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_ENABLEHOSTNAMES=",      line: "TYK_DB_HOSTCONFIG_ENABLEHOSTNAMES=True" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_PORTALROOTPATH=",       line: "TYK_DB_HOSTCONFIG_PORTALROOTPATH=/portal" }
+    - { regexp: "^TYK_DB_HTTPSERVEROPTIONS_USESSL=",        line: "TYK_DB_HTTPSERVEROPTIONS_USESSL={{ dash.service.tls }}" }
+    - { regexp: "^TYK_DB_HASHKEYS=",                        line: "TYK_DB_HASHKEYS=True" }
+    - { regexp: "^TYK_DB_HIDELISTENPATH=",                  line: "TYK_DB_HIDELISTENPATH=False" }
+    - { regexp: "^TYK_DB_ENABLEMASTERKEYS=",                line: "TYK_DB_ENABLEMASTERKEYS=False" }
+    - { regexp: "^TYK_DB_ENABLEDUPLICATESLUGS=",            line: "TYK_DB_ENABLEDUPLICATESLUGS=True" }
+    - { regexp: "^TYK_DB_HOSTCONFIG_DISABLEORGSLUGPREFIX=", line: "TYK_DB_HOSTCONFIG_DISABLEORGSLUGPREFIX=True" }
+    - { regexp: "^TYK_DB_SHOWORGID=",                       line: "TYK_DB_SHOWORGID=True" }
+    - { regexp: "^TYK_DB_HOMEDIR=",                         line: "TYK_DB_HOMEDIR=/opt/tyk-dashboard" }
+    - { regexp: "^TYK_DB_ALLOWEXPLICITPOLICYID=",           line: "TYK_DB_ALLOWEXPLICITPOLICYID=True" }
+
+- name: Mongo URL environment varibales
+  vars:
+    mh: "{{ hostvars['mongodb']['ansible_host'] if mongo.host == None else mongo.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-dashboard
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=", line: "TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=mongodb://{{ mh }}:{{ mongo.port }}/tyk_analytics" }
+  when:
+    dash.storage.type == "mongo"
+
+- name: PGSQL connection environment varibales
+  vars:
+    ph: "{{ hostvars['pgsql']['ansible_host'] if pgsql.host == None else pgsql.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-dashboard
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=", line: "TYK_DB_STORAGE_MAIN_CONNECTIONSTRING=user={{ postgresql_users[0].name }} password={{ postgresql_users[0].password }} host={{ ph }} port=5432 database={{ postgresql_databases[0].name }}" }
+  when:
+    dash.storage.type == "postgres"
