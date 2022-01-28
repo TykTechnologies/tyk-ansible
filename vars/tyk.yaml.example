@@ -35,9 +35,10 @@ gateway:
     tags:
   rpc:
     connString: ""
-    useSSL: false
+    useSSL: true
     sslInsecureSkipVerify: true
     # orgID of your dashboard user
     rpcKey: ""
     # API key of your dashboard user
     apiKey: ""
+    groupId: ""

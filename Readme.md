@@ -90,7 +90,8 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 | gateway.sharding.enabled | `false` | Set to `true` if you want the Gateway to run in sharded mode |
 | gateway.sharding.tags | | Tags that will be loaded on the current Gateway |
 | gateway.rpc.connString | | Use this setting to add the URL for your MDCB or load balancer host |
-| gateway.rpc.useSSL | `false` | Set this option to `true` to use an SSL RPC connection|
+| gateway.rpc.useSSL | `true` | Set this option to `true` to use an SSL RPC connection|
 | gateway.rpc.sslInsecureSkipVerify | `true` | Set this option to `true` to allow the certificate validation (certificate chain and hostname) to be skipped. This can be useful if you use a self-signed certificate |
 | gateway.rpc.rpcKey | | Your organisation ID to connect to the MDCB installation |
 | gateway.rpc.apiKey | | This the API key of a user used to authenticate and authorise the Gateway’s access through MDCB. The user should be a standard Dashboard user with minimal privileges so as to reduce any risk if the user is compromised. The suggested security settings are read for Real-time notifications and the remaining options set to deny |
+| gateway.rpc.apiKey | | This is the `zone` that this instance inhabits, e.g. the cluster/data-centre the Gateway lives in. The group ID must be the same across all the Gateways of a data-centre/cluster which are also sharing the same Redis instance. This ID should also be unique per cluster (otherwise another Gateway cluster can pick up your keyspace events and your cluster will get zero updates). |

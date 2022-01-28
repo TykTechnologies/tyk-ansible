@@ -85,6 +85,7 @@
     - { regexp: "^TYK_GW_SLAVEOPTIONS_APIKEY=",                          line: "TYK_GW_SLAVEOPTIONS_APIKEY={{ gateway.rpc.apiKey }}" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_CONNECTIONSTRING=",                line: "TYK_GW_SLAVEOPTIONS_CONNECTIONSTRING={{ gateway.rpc.connString }}" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_USESSL=",                          line: "TYK_GW_SLAVEOPTIONS_USESSL={{ gateway.rpc.useSSL }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_GROUPID=",                         line: "TYK_GW_SLAVEOPTIONS_GROUPID={{ gateway.rpc.groupId }}" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_BINDTOSLUGSINSTEADOFLISTENPATHS=", line: "TYK_GW_SLAVEOPTIONS_BINDTOSLUGSINSTEADOFLISTENPATHS=False" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_SSLINSECURESKIPVERIFY=",           line: "TYK_GW_SLAVEOPTIONS_SSLINSECURESKIPVERIFY={{ gateway.rpc.sslInsecureSkipVerify }}" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=",                     line: "TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=20" }
