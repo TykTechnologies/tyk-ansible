@@ -128,3 +128,15 @@
     name: tyk-gateway
     state: started
     enabled: yes
+
+- name: Copy python3.7.sh to /opt/python3.7.sh
+  template:
+    src: "../files/python3.7.sh"
+    dest: "/opt/python3.7.sh"
+  when:
+    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+
+- name: Install Python 3.7 using /opt/python3.7.sh
+  shell: sh /opt/python3.7.sh
+  when:
+    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
