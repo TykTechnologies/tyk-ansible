@@ -33,3 +33,11 @@ gateway:
   sharding:
     enabled: False
     tags:
+  rpc:
+    connString: ""
+    useSSL: false
+    sslInsecureSkipVerify: true
+    # orgID of your dashboard user
+    rpcKey: ""
+    # API key of your dashboard user
+    apiKey: ""

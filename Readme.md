@@ -14,12 +14,12 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command. Not specifying a tag will install **Tyk Pro** as well as **Redis** and **MongoDB**.
 
 - **tyk-pro**: `dashboard`, `gateway`, `pump`
-- **tyk-ce**: `gateway` with CE config
+- **tyk-gateway-ce**: `gateway` with CE config
+- **tyk-gateway-pro**: `gateway` with pro config
+- **tyk-gateway-hybrid**: `gateway` with hybrid config
+- **tyk-pump**: `pump`
 - **redis**: `redis`
 - **mongodb**: `mongodb`
-- **tyk-dashboard**: `dashboard`
-- **tyk-gateway**: `gateway`
-- **tyk-pump**: `pump`
 
 ## Supported Servers
 | Distribution | Version | Supported |
@@ -83,9 +83,14 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 | dash.service.port | `3000` | Dashboard server listening port |
 | dash.service.proto | `http` | Dashboard server protocol |
 | dash.service.tls | `false` | Set to `true` if you want the Dashboard to run with SSL |
-| dash.service.host | | Gateway server host if different than the hosts url |
-| dash.service.port | `8080` | Gateway server listening port |
-| dash.service.proto | `http` | Gateway server protocol |
-| dash.service.tls | `false` | Set to `true` if you want the Gateway to run with SSL |
-| dash.sharding.enabled | `false` | Set to `true` if you want the Gateway to run in sharded mode |
-| dash.sharding.tags | | Tags that will be loaded on the current Gateway |
+| gateway.service.host | | Gateway server host if different than the hosts url |
+| gateway.service.port | `8080` | Gateway server listening port |
+| gateway.service.proto | `http` | Gateway server protocol |
+| gateway.service.tls | `false` | Set to `true` if you want the Gateway to run with SSL |
+| gateway.sharding.enabled | `false` | Set to `true` if you want the Gateway to run in sharded mode |
+| gateway.sharding.tags | | Tags that will be loaded on the current Gateway |
+| gateway.rpc.connString | | Use this setting to add the URL for your MDCB or load balancer host |
+| gateway.rpc.useSSL | `false` | Set this option to `true` to use an SSL RPC connection|
+| gateway.rpc.sslInsecureSkipVerify | `true` | Set this option to `true` to allow the certificate validation (certificate chain and hostname) to be skipped. This can be useful if you use a self-signed certificate |
+| gateway.rpc.rpcKey | | Your organisation ID to connect to the MDCB installation |
+| gateway.rpc.apiKey | | This the API key of a user used to authenticate and authorise the Gateway’s access through MDCB. The user should be a standard Dashboard user with minimal privileges so as to reduce any risk if the user is compromised. The suggested security settings are read for Real-time notifications and the remaining options set to deny |
