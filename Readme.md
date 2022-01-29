@@ -82,13 +82,13 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 | dash.service.host | | Dashboard server host if different than the hosts url |
 | dash.service.port | `3000` | Dashboard server listening port |
 | dash.service.proto | `http` | Dashboard server protocol |
-| dash.service.tls | `false` | Set to `true` if you want the Dashboard to run with SSL |
+| dash.service.tls | `false` | Set to `true` to enable SSL connections |
 | gateway.service.host | | Gateway server host if different than the hosts url |
 | gateway.service.port | `8080` | Gateway server listening port |
 | gateway.service.proto | `http` | Gateway server protocol |
-| gateway.service.tls | `false` | Set to `true` if you want the Gateway to run with SSL |
-| gateway.sharding.enabled | `false` | Set to `true` if you want the Gateway to run in sharded mode |
-| gateway.sharding.tags | | Tags that will be loaded on the current Gateway |
+| gateway.service.tls | `false` | Set to `true` to enable SSL connections |
+| gateway.sharding.enabled | `false` | Set to `true` to enable filtering (sharding) of APIs |
+| gateway.sharding.tags | | The tags to use when filtering (sharding) Tyk Gateway nodes. Tags are processed as OR operations. If you include a non-filter tag (e.g. an identifier such as `node-id-1`, this will become available to your Dashboard analytics) |
 | gateway.rpc.connString | | Use this setting to add the URL for your MDCB or load balancer host |
 | gateway.rpc.useSSL | `true` | Set this option to `true` to use an SSL RPC connection|
 | gateway.rpc.sslInsecureSkipVerify | `true` | Set this option to `true` to allow the certificate validation (certificate chain and hostname) to be skipped. This can be useful if you use a self-signed certificate |
