@@ -129,14 +129,12 @@
     state: started
     enabled: yes
 
-- name: Copy python3.7.sh to /opt/python3.7.sh
-  template:
-    src: "../files/python3.7.sh"
-    dest: "/opt/python3.7.sh"
-  when:
-    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+- name: Check if Python 3.7 is installed
+  stat:
+    path: /usr/local/bin/python3.7
+  register: py
 
-- name: Install Python 3.7 using /opt/python3.7.sh
-  shell: sh /opt/python3.7.sh
+- name: Include Python 3.7 installation task
+  include_tasks: python3.yaml
   when:
-    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8" and not py.stat.exists
