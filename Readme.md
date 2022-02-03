@@ -26,17 +26,16 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | Distribution | Version | Supported |
 | --------- | :---------: | :---------: |
 | Amazon Linux | 2 | ✅ |
+| CentOS | 8 | ✅ |
 | CentOS | 7 | ✅ |
-| CentOS | 6 | ❌ |
 | Debian | 10 | ✅ |
 | Debian | 9 | ✅ |
-| Debian | 8 | ❌ |
+| RHEL | 8 | ✅ |
 | RHEL | 7 | ✅ |
-| RHEL | 6 | ❌ |
+| Ubuntu | 21 | ✅ |
 | Ubuntu | 20 | ✅ |
 | Ubuntu | 18 | ✅ |
 | Ubuntu | 16 | ✅ |
-| Ubuntu | 14 | ❌ |
 
 ## Variables
 - `vars/tyk.yaml`
