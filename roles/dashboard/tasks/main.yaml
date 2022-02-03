@@ -1,27 +1,27 @@
 ---
 - name: Gather RedHat based systems' specific variables
-  include_vars: "redhat.yml"
+  include_vars: "redhat.yaml"
   when:
     ansible_distribution == "RedHat" or
     ansible_distribution == "CentOS" or
     ansible_distribution == "Amazon"
 
 - name: Gather Debian based systems' specific variables
-  include_vars: "debian.yml"
+  include_vars: "debian.yaml"
   when:
     ansible_distribution == "Debian" or
     ansible_distribution == "Ubuntu"
 
-- name: Install tyk-pump required packages
+- name: Install tyk-dashboard required packages
   package:
     name: "{{ item }}"
     state: present
-    update_cache: yes
+    update_cache: true
   with_items: "{{ required_packages }}"
 
-- name: Add tyk-pump public key to verify package
+- name: Add tyk-dashboard public key to verify package
   apt_key:
-    url: https://packagecloud.io/tyk/tyk-pump/gpgkey
+    url: https://packagecloud.io/tyk/tyk-dashboard/gpgkey
     state: present
   when:
     ansible_distribution == "Ubuntu" or
@@ -32,11 +32,11 @@
     src: "../files/{{ package_def_file }}"
     dest: "{{ package_def_folder }}/{{ package_def_file }}"
 
-- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-pump
-  include_tasks: configure.yml
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-dashboard
+  include_tasks: configure.yaml
 
-- name: Install tyk-pump
+- name: Install tyk-dashboard
   package:
-    name: tyk-pump
+    name: tyk-dashboard
     state: present
     update_cache: yes

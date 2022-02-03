@@ -7,8 +7,8 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 ## Getting Started
 1. Clone repo and navigate to the repo directory.
 2. Run initalization script to initialize environment `sh scripts/init.sh`.
-3. Modify `hosts.yml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
-4. Run `ansible-playbook playbook.yml -t redis -t mongodb -t tyk-pro` to install Tyk.
+3. Modify `hosts.yaml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
+4. Run `ansible-playbook playbook.yaml -t redis -t mongodb -t tyk-pro` to install Tyk.
 
 ## Installation flavors
 Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command.
@@ -39,7 +39,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | Ubuntu | 14 | ❌ |
 
 ## Variables
-- `vars/tyk.yml`
+- `vars/tyk.yaml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -75,7 +75,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | gateway.rpc.apiKey | | This the API key of a user used to authenticate and authorise the Gateway’s access through MDCB. The user should be a standard Dashboard user with minimal privileges so as to reduce any risk if the user is compromised. The suggested security settings are read for Real-time notifications and the remaining options set to deny |
 | gateway.rpc.groupId | | This is the `zone` that this instance inhabits, e.g. the cluster/data-centre the Gateway lives in. The group ID must be the same across all the Gateways of a data-centre/cluster which are also sharing the same Redis instance. This ID should also be unique per cluster (otherwise another Gateway cluster can pick up your keyspace events and your cluster will get zero updates). |
 
-- `vars/redis.yml`
+- `vars/redis.yaml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -83,7 +83,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 
 Read more about Redis configuration [here](https://github.com/geerlingguy/ansible-role-redis).
 
-- `vars/mongodb.yml`
+- `vars/mongodb.yaml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -92,7 +92,7 @@ Read more about Redis configuration [here](https://github.com/geerlingguy/ansibl
 
 Read more about MongoDB configuration [here](https://github.com/ansible-collections/community.mongodb).
 
-- `vars/pgsql.yml`
+- `vars/pgsql.yaml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |

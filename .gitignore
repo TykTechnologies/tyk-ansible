@@ -1,5 +1,5 @@
 **/*.pem
 **/.DS_Store
-**/hosts.yml
+**/hosts.yaml
 **/ansible.cfg
-**/tyk.yml
+**/tyk.yaml
