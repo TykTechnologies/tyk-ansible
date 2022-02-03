@@ -48,6 +48,7 @@
 
   tags:
     - tyk-pro
+    - tyk-dashboard
 
 - hosts: gateway
   become: true

@@ -14,6 +14,7 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command.
 
 - **tyk-pro**: `dashboard`, `gateway`, `pump`
+- **tyk-dashboard**: `dashboard`
 - **tyk-gateway-ce**: `gateway` with CE config
 - **tyk-gateway-pro**: `gateway` with pro config
 - **tyk-gateway-hybrid**: `gateway` with hybrid config
@@ -22,7 +23,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 - **mongodb**: `mongodb`
 - **pgsql**: `pgsql`
 
-## Supported Servers
+## Supported Distributions
 | Distribution | Version | Supported |
 | --------- | :---------: | :---------: |
 | Amazon Linux | 2 | ✅ |
