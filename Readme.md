@@ -62,6 +62,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | dash.service.port | `3000` | Dashboard server listening port |
 | dash.service.proto | `http` | Dashboard server protocol |
 | dash.service.tls | `false` | Set to `true` to enable SSL connections |
+| dash.storage.type | `mongo` | Set to `postgres` to use Postgres instead of MongoDB |
 | gateway.service.host | | Gateway server host if different than the hosts url |
 | gateway.service.port | `8080` | Gateway server listening port |
 | gateway.service.proto | `http` | Gateway server protocol |
