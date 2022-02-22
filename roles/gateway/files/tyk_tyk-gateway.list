@@ -1,2 +1,2 @@
-deb [trusted=yes] https://packagecloud.io/tyk/tyk-gateway-unstable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
-deb-src [trusted=yes] https://packagecloud.io/tyk/tyk-gateway-unstable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
+deb [trusted=yes] https://packagecloud.io/tyk/tyk-gateway/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
+deb-src [trusted=yes] https://packagecloud.io/tyk/tyk-gateway/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main
