@@ -1,0 +1,84 @@
+---
+- name: Common environment varibales
+  vars:
+    rh: "{{ hostvars['redis']['ansible_host'] if redis.host == None else redis.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_SECRET=",                           line: "TYK_GW_SECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_LISTENPORT=",                       line: "TYK_GW_LISTENPORT={{ gateway.service.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_TYPE=",                     line: "TYK_GW_STORAGE_TYPE=redis" }
+    - { regexp: "^TYK_GW_STORAGE_HOST=",                     line: "TYK_GW_STORAGE_HOST={{ rh }}" }
+    - { regexp: "^TYK_GW_STORAGE_PORT=",                     line: "TYK_GW_STORAGE_PORT={{ redis.port }}" }
+    - { regexp: "^TYK_GW_STORAGE_PASSWORD=",                 line: "TYK_GW_STORAGE_PASSWORD={{ redis.pass }}" }
+    - { regexp: "^TYK_GW_STORAGE_ENABLECLUSTER=",            line: "TYK_GW_STORAGE_ENABLECLUSTER={{ redis.enableCluster }}" }
+    - { regexp: "^TYK_GW_STORAGE_USESSL=",                   line: "TYK_GW_STORAGE_USESSL={{ redis.tls }}" }
+    - { regexp: "^TYK_GW_STORAGE_DATABASE=",                 line: "TYK_GW_STORAGE_DATABASE={{ redis.storage.database }}" }
+    - { regexp: "^TYK_GW_ALLOWINSECURECONFIGS=",             line: "TYK_GW_ALLOWINSECURECONFIGS=True" }
+    - { regexp: "^TYK_GW_ENABLEANALYTICS=",                  line: "TYK_GW_ENABLEANALYTICS=True" }
+    - { regexp: "^TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=", line: "TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=True" }
+
+- name: tyk-pro environment varibales
+  vars:
+    dh: "{{ hostvars['dashboard']['ansible_host'] if dash.service.host == None else dash.service.host }}"
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_NODESECRET=",                       line: "TYK_GW_NODESECRET={{ secrets.APISecret }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYCONNECTIONSTRING=",  line: "TYK_GW_POLICIES_POLICYCONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING=",line: "TYK_GW_DBAPPCONFOPTIONS_CONNECTIONSTRING={{ dash.service.proto }}://{{ dh }}:{{ dash.service.port }}" }
+    - { regexp: "^TYK_GW_HTTPSERVEROPTIONS_USESSL=",         line: "TYK_GW_HTTPSERVEROPTIONS_USESSL={{ gateway.service.tls }}" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",            line: "TYK_GW_POLICIES_POLICYSOURCE=service" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",        line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
+    - { regexp: "^TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=",   line: "TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=True" }
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                  line: "TYK_GW_USEDBAPPCONFIGS=True" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=", line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED={{ gateway.sharding.enabled }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",            line: "TYK_GW_DBAPPCONFOPTIONS_TAGS={{ gateway.sharding.tags }}" }
+    - { regexp: "^TYK_GW_ENABLEJSVM=",                       line: "TYK_GW_ENABLEJSVM=True" }
+    - { regexp: "^TYK_GW_ENABLECUSTOMDOMAINS=",              line: "TYK_GW_ENABLECUSTOMDOMAINS=True" }
+    - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",             line: "TYK_GW_ANALYTICSCONFIG_TYPE=mongo" }
+  when: "'tyk-gateway-ce' not in ansible_run_tags and 'tyk-gateway-hybrid' not in ansible_run_tags"
+
+- name: tyk-ce environment varibales
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",           line: "TYK_GW_USEDBAPPCONFIGS=False" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",     line: "TYK_GW_POLICIES_POLICYSOURCE=file" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=", line: "TYK_GW_POLICIES_POLICYRECORDNAME=/opt/tyk-gateway/policies/policies.json" }
+  when: "'tyk-gateway-ce' in ansible_run_tags"
+
+- name: tyk-ce environment varibales
+  lineinfile:
+    dest: /etc/sysconfig/tyk-gateway
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^TYK_GW_POLICIES_POLICYSOURCE=",                        line: "TYK_GW_POLICIES_POLICYSOURCE=rpc" }
+    - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",                    line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
+    - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                              line: "TYK_GW_USEDBAPPCONFIGS=False" }
+    - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",                         line: "TYK_GW_ANALYTICSCONFIG_TYPE=rpc" }
+    - { regexp: "^TYK_GW_AUTHOVERRIDE_FORCEAUTHPROVIDER=",               line: "TYK_GW_AUTHOVERRIDE_FORCEAUTHPROVIDER=True" }
+    - { regexp: "^TYK_GW_AUTHOVERRIDE_AUTHPROVIDER_STORAGEENGINE=",      line: "TYK_GW_AUTHOVERRIDE_AUTHPROVIDER_STORAGEENGINE=rpc" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_USERPC=",                          line: "TYK_GW_SLAVEOPTIONS_USERPC=True" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_RPCKEY=",                          line: "TYK_GW_SLAVEOPTIONS_RPCKEY={{ gateway.rpc.rpcKey }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_APIKEY=",                          line: "TYK_GW_SLAVEOPTIONS_APIKEY={{ gateway.rpc.apiKey }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_CONNECTIONSTRING=",                line: "TYK_GW_SLAVEOPTIONS_CONNECTIONSTRING={{ gateway.rpc.connString }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_USESSL=",                          line: "TYK_GW_SLAVEOPTIONS_USESSL={{ gateway.rpc.useSSL }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_GROUPID=",                         line: "TYK_GW_SLAVEOPTIONS_GROUPID={{ gateway.rpc.groupId }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_BINDTOSLUGSINSTEADOFLISTENPATHS=", line: "TYK_GW_SLAVEOPTIONS_BINDTOSLUGSINSTEADOFLISTENPATHS=False" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_SSLINSECURESKIPVERIFY=",           line: "TYK_GW_SLAVEOPTIONS_SSLINSECURESKIPVERIFY={{ gateway.rpc.sslInsecureSkipVerify }}" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=",                     line: "TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=20" }
+    - { regexp: "^TYK_GW_SLAVEOPTIONS_ENABLERPCCACHE=",                  line: "TYK_GW_SLAVEOPTIONS_ENABLERPCCACHE=True" }
+    - { regexp: "^TYK_GW_ENABLENONTRANSACTIONALRATELIMITER=",            line: "TYK_GW_ENABLENONTRANSACTIONALRATELIMITER=True" }
+  when: "'tyk-gateway-hybrid' in ansible_run_tags"

@@ -1,0 +1,16 @@
+postgresql_databases:
+  - name: tyk_analytics
+postgresql_users:
+  - name: default
+    password: topsecretpassword
+postgresql_global_config_options:
+  - option: unix_socket_directories
+    value: '{{ postgresql_unix_socket_directories | join(",") }}'
+  - option: listen_addresses
+    value: '*'
+postgresql_hba_entries:
+  - { type: local, database: all,           user: postgres,                         auth_method: peer }
+  - { type: local, database: all,           user: all,                              auth_method: peer }
+  - { type: host,  database: all,           user: all,     address: '127.0.0.1/32', auth_method: "{{ postgresql_auth_method }}" }
+  - { type: host,  database: all,           user: all,     address: '::1/128',      auth_method: "{{ postgresql_auth_method }}" }
+  - { type: host,  database: tyk_analytics, user: default, address: '0.0.0.0/0',    auth_method: md5 }

@@ -16,6 +16,10 @@ mongo:
   port: 27017
   tls: False
 
+pgsql:
+  host:
+  port: 5432
+
 dash:
   license:
   service:
@@ -23,6 +27,8 @@ dash:
     port: 3000
     proto: http
     tls: False
+  storage:
+    type: mongo
 
 gateway:
   service:
@@ -34,11 +40,11 @@ gateway:
     enabled: False
     tags:
   rpc:
-    connString: ""
+    connString:
     useSSL: true
     sslInsecureSkipVerify: true
     # orgID of your dashboard user
-    rpcKey: ""
+    rpcKey:
     # API key of your dashboard user
-    apiKey: ""
-    groupId: ""
+    apiKey:
+    groupId:
