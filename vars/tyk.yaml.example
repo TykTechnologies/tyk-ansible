@@ -36,6 +36,8 @@ gateway:
     port: 8080
     proto: http
     tls: False
+    enableBundleDownloader: False
+    bundlebaseurl: 
   sharding:
     enabled: False
     tags:

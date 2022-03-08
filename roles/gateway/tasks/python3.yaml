@@ -26,14 +26,14 @@
 - name: Extract Python-3.7.9.tgz into /opt/tyk-gateway/tmp/Python-3.7.9/
   shell: sudo tar xzf /opt/tyk-gateway/tmp/Python-3.7.9.tgz  --directory /opt/tyk-gateway/tmp/
 
-- name: Configure Python 3.7.9 with --enable-shared flag
-  shell: sudo /opt/tyk-gateway/tmp/Python-3.7.9/configure --enable-shared
+- name: Configure Python 3.7.9 with  --enable-shared --enable-optimizations --prefix=/usr flags
+  shell: sudo /opt/tyk-gateway/tmp/Python-3.7.9/configure --enable-shared --enable-optimizations --prefix=/usr
 
 - name: Use make command to complete Python 3.7.9 installation
-  shell: sudo make altinstall
+  shell: sudo make install
 
-- name: Load Python library config from /usr/local/lib
-  shell: sudo ldconfig /usr/local/lib
+- name: Load Python library config from /usr/lib
+  shell: sudo ldconfig /usr/lib
 
 - name: Remove /opt/tyk-gateway/tmp directory
   file:
@@ -43,4 +43,9 @@
 - name: Install protobuf for Python 3.7
   pip:
     name: protobuf
-    executable: /usr/local/bin/pip3.7
+    executable: /usr/bin/pip3.7
+
+- name: Install grpcio for Python 3.7
+  pip:
+    name: grpcio
+    executable: /usr/bin/pip3.7 

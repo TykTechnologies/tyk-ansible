@@ -81,4 +81,6 @@
     - { regexp: "^TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=",                     line: "TYK_GW_SLAVEOPTIONS_RPCPOOLSIZE=20" }
     - { regexp: "^TYK_GW_SLAVEOPTIONS_ENABLERPCCACHE=",                  line: "TYK_GW_SLAVEOPTIONS_ENABLERPCCACHE=True" }
     - { regexp: "^TYK_GW_ENABLENONTRANSACTIONALRATELIMITER=",            line: "TYK_GW_ENABLENONTRANSACTIONALRATELIMITER=True" }
+    - { regexp: "^TYK_GW_ENABLEBUNDLEDOWNLOADER=",                       line: "TYK_GW_ENABLEBUNDLEDOWNLOADER={{ gateway.service.enableBundleDownloader }}" }
+    - { regexp: "^TYK_GW_BUNDLEBASEURL=",                                line: "TYK_GW_BUNDLEBASEURL={{ gateway.service.bundleBaseUrl }}" }
   when: "'tyk-gateway-hybrid' in ansible_run_tags"

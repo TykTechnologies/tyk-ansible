@@ -43,7 +43,7 @@
 
 - name: Check if Python 3.7 is installed
   stat:
-    path: /usr/local/bin/python3.7
+    path: /usr/bin/python3.7
   register: py
 
 - name: Include Python 3.7 installation task
