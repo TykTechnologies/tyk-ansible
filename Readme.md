@@ -67,6 +67,8 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | gateway.service.port | `8080` | Gateway server listening port |
 | gateway.service.proto | `http` | Gateway server protocol |
 | gateway.service.tls | `false` | Set to `true` to enable SSL connections |
+| gateway.service.enableBundleDownloader | `false` | Set to `true` will enable bundle downloader |
+| gateway.service.bundleBaseUrl | | Server where bundles are hosted |
 | gateway.sharding.enabled | `false` | Set to `true` to enable filtering (sharding) of APIs |
 | gateway.sharding.tags | | The tags to use when filtering (sharding) Tyk Gateway nodes. Tags are processed as OR operations. If you include a non-filter tag (e.g. an identifier such as `node-id-1`, this will become available to your Dashboard analytics) |
 | gateway.rpc.connString | | Use this setting to add the URL for your MDCB or load balancer host |
