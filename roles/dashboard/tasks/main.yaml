@@ -37,6 +37,6 @@
 
 - name: Install tyk-dashboard
   package:
-    name: tyk-dashboard
+    name: tyk-dashboard={{ dash.service.version }}
     state: present
     update_cache: yes

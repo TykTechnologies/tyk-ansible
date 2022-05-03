@@ -37,6 +37,6 @@
 
 - name: Install tyk-pump
   package:
-    name: tyk-pump
+    name: tyk-pump={{ pump.service.version }}
     state: present
     update_cache: yes

@@ -37,7 +37,7 @@
 
 - name: Install tyk-gateway
   package:
-    name: tyk-gateway
+    name: tyk-gateway={{ gateway.service.version }}
     state: present
     update_cache: yes
 
