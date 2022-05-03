@@ -58,11 +58,13 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | pgsql.port | `5432` | PGSQL server listening port  |
 | pgsql.tls | `false` | Enable if pgsql connection is secured with SSL |
 | dash.license | | Dashboard license|
+| dash.service.version | `4.0.0` | Tyk Dashboard service version |
 | dash.service.host | | Dashboard server host if different than the hosts url |
 | dash.service.port | `3000` | Dashboard server listening port |
 | dash.service.proto | `http` | Dashboard server protocol |
 | dash.service.tls | `false` | Set to `true` to enable SSL connections |
 | dash.storage.type | `mongo` | Set to `postgres` to use Postgres instead of MongoDB |
+| gateway.service.version | `4.0.0` | Tyk Gateway service version |
 | gateway.service.host | | Gateway server host if different than the hosts url |
 | gateway.service.port | `8080` | Gateway server listening port |
 | gateway.service.proto | `http` | Gateway server protocol |
@@ -77,6 +79,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 | gateway.rpc.rpcKey | | Your organisation ID to connect to the MDCB installation |
 | gateway.rpc.apiKey | | This the API key of a user used to authenticate and authorise the Gateway’s access through MDCB. The user should be a standard Dashboard user with minimal privileges so as to reduce any risk if the user is compromised. The suggested security settings are read for Real-time notifications and the remaining options set to deny |
 | gateway.rpc.groupId | | This is the `zone` that this instance inhabits, e.g. the cluster/data-centre the Gateway lives in. The group ID must be the same across all the Gateways of a data-centre/cluster which are also sharing the same Redis instance. This ID should also be unique per cluster (otherwise another Gateway cluster can pick up your keyspace events and your cluster will get zero updates). |
+| pump.service.version | `1.5.1` | Tyk Pump service version |
 
 - `vars/redis.yaml`
 
