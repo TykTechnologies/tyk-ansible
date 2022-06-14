@@ -18,6 +18,7 @@
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL=",   line: "TYK_PMP_ANALYTICSSTORAGECONFIG_REDISUSESSL={{ redis.tls }}"}
     - { regexp: "^TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE=",      line: "TYK_PMP_ANALYTICSSTORAGECONFIG_DATABASE={{ redis.storage.database }}" }
     - { regexp: "^TYK_PMP_DONTPURGEUPTIMEDATA=",                  line: "TYK_PMP_DONTPURGEUPTIMEDATA=False"}
+    - { regexp: "^TYK_PMP_PURGEDELAY=",                           line: "TYK_PMP_PURGEDELAY=10"}
 
 - name: Mongo Pumps environment varibales
   vars:
