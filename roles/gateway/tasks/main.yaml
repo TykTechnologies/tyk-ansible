@@ -40,6 +40,17 @@
     name: tyk-gateway={{ gateway.service.version }}
     state: present
     update_cache: yes
+  when:
+    ansible_distribution == "Ubuntu" or
+    ansible_distribution == "Debian"
+
+- name: Install tyk-gateway
+  package:
+    name: tyk-gateway-{{ gateway.service.version }}
+    state: present
+    update_cache: yes
+  when:
+    ansible_distribution == "RedHat"
 
 - name: Check if Python 3.7 is installed
   stat:
