@@ -19,6 +19,7 @@ Installation falvors can be specified by using the `-t {tag}` at the end of the 
 - **tyk-gateway-pro**: `gateway` with pro config
 - **tyk-gateway-hybrid**: `gateway` with hybrid config
 - **tyk-pump**: `pump`
+- **tyk-portal**: `portal`
 - **redis**: `redis`
 - **mongodb**: `mongodb`
 - **pgsql**: `pgsql`

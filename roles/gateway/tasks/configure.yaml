@@ -57,7 +57,7 @@
     - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=", line: "TYK_GW_POLICIES_POLICYRECORDNAME=/opt/tyk-gateway/policies/policies.json" }
   when: "'tyk-gateway-ce' in ansible_run_tags"
 
-- name: tyk-ce environment varibales
+- name: tyk-hybrid environment varibales
   lineinfile:
     dest: /etc/sysconfig/tyk-gateway
     create: true

@@ -1,0 +1,16 @@
+---
+- name: Common environment varibales
+  lineinfile:
+    dest: /etc/sysconfig/tyk-developer-portal
+    create: true
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^ADMIN_EMAIL=",                      line: "ADMIN_EMAIL={{ portal.admin.email }}" }
+    - { regexp: "^ADMIN_PASSWORD=",                   line: "ADMIN_PASSWORD={{ portal.admin.password }}" }
+    - { regexp: "^PROVIDER_DATA=",                    line: "PROVIDER_DATA={\"URL\":\"{{ portal.provider.url }}\",\"Secret\":\"{{ portal.provider.apiKey }}\",\"OrgID\":\"{{ portal.provider.orgId }}\"}" }
+    - { regexp: "^PROVIDER_NAME=",                    line: "PROVIDER_NAME=tyk" }
+    - { regexp: "^PORTAL_DATABASE_DIALECT=",          line: "PORTAL_DATABASE_DIALECT={{ portal.storage.type }}" }
+    - { regexp: "^PORTAL_THEMING_THEME=",             line: "PORTAL_THEMING_THEME=default" }
+    - { regexp: "^PORTAL_THEMING_PATH=",              line: "PORTAL_THEMING_PATH=./themes" }
+    - { regexp: "^PORTAL_LICENSEKEY=",                line: "PORTAL_LICENSEKEY={{ portal.license }}" }

@@ -1,0 +1,2 @@
+package_def_file: tyk_portal.list
+package_def_folder: /etc/apt/sources.list.d
