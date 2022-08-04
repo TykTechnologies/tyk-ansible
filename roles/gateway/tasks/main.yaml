@@ -51,13 +51,3 @@
     update_cache: yes
   when:
     ansible_distribution == "RedHat"
-
-- name: Check if Python 3.7 is installed
-  stat:
-    path: /usr/bin/python3.7
-  register: py
-
-- name: Include Python 3.7 installation task
-  include_tasks: python3.yaml
-  when:
-    ansible_distribution == "RedHat" and ansible_distribution_major_version == "8" and not py.stat.exists
