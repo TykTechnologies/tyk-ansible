@@ -40,3 +40,14 @@
     name: tyk-pump={{ pump.service.version }}
     state: present
     update_cache: yes
+  when:
+    ansible_distribution == "Ubuntu" or
+    ansible_distribution == "Debian"
+
+- name: Install tyk-pump
+  package:
+    name: tyk-pump-{{ pump.service.version }}
+    state: present
+    update_cache: yes
+  when:
+    ansible_distribution == "RedHat"
