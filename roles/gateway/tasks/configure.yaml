@@ -20,6 +20,8 @@
     - { regexp: "^TYK_GW_ALLOWINSECURECONFIGS=",             line: "TYK_GW_ALLOWINSECURECONFIGS=True" }
     - { regexp: "^TYK_GW_ENABLEANALYTICS=",                  line: "TYK_GW_ENABLEANALYTICS=True" }
     - { regexp: "^TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=", line: "TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS=True" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=", line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED={{ gateway.sharding.enabled }}" }
+    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",            line: "TYK_GW_DBAPPCONFOPTIONS_TAGS={{ gateway.sharding.tags }}" }
 
 - name: tyk-pro environment varibales
   vars:
@@ -38,8 +40,6 @@
     - { regexp: "^TYK_GW_POLICIES_POLICYRECORDNAME=",        line: "TYK_GW_POLICIES_POLICYRECORDNAME=tyk_policies" }
     - { regexp: "^TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=",   line: "TYK_GW_POLICIES_ALLOWEXPLICITPOLICYID=True" }
     - { regexp: "^TYK_GW_USEDBAPPCONFIGS=",                  line: "TYK_GW_USEDBAPPCONFIGS=True" }
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED=", line: "TYK_GW_DBAPPCONFOPTIONS_NODEISSEGMENTED={{ gateway.sharding.enabled }}" }
-    - { regexp: "^TYK_GW_DBAPPCONFOPTIONS_TAGS=",            line: "TYK_GW_DBAPPCONFOPTIONS_TAGS={{ gateway.sharding.tags }}" }
     - { regexp: "^TYK_GW_ENABLEJSVM=",                       line: "TYK_GW_ENABLEJSVM=True" }
     - { regexp: "^TYK_GW_ENABLECUSTOMDOMAINS=",              line: "TYK_GW_ENABLECUSTOMDOMAINS=True" }
     - { regexp: "^TYK_GW_ANALYTICSCONFIG_TYPE=",             line: "TYK_GW_ANALYTICSCONFIG_TYPE=mongo" }
