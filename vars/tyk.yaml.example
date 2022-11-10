@@ -23,7 +23,7 @@ pgsql:
 dash:
   license:
   service:
-    version: 4.0.0
+    version: 4.2.1
     host:
     port: 3000
     proto: http
@@ -33,13 +33,13 @@ dash:
 
 gateway:
   service:
-    version: 4.0.0
+    version: 4.2.1
     host:
     port: 8080
     proto: http
     tls: False
     enableBundleDownloader: False
-    bundlebaseurl: 
+    bundlebaseurl:
   sharding:
     enabled: False
     tags:
