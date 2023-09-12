@@ -11,7 +11,7 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 4. Run `ansible-playbook playbook.yaml -t redis -t mongodb -t tyk-pro` to install Tyk.
 
 ## Installation flavors
-Installation falvors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command.
+Installation flavors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command.
 
 - **tyk-pro**: `dashboard`, `gateway`, `pump`
 - **tyk-dashboard**: `dashboard`
