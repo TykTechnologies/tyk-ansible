@@ -76,3 +76,14 @@
   tags:
     - tyk-pro
     - tyk-pump
+
+- hosts: portal
+  become: true
+  vars_files:
+    - ./vars/tyk.yaml
+
+  roles:
+    - portal
+
+  tags:
+    - tyk-portal

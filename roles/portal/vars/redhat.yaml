@@ -1,0 +1,2 @@
+package_def_file: tyk_portal.repo
+package_def_folder: /etc/yum.repos.d

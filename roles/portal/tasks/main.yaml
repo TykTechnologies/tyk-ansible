@@ -1,0 +1,46 @@
+---
+- name: Gather RedHat based systems' specific variables
+  include_vars: "redhat.yaml"
+  when:
+    ansible_distribution == "RedHat" or
+    ansible_distribution == "CentOS" or
+    ansible_distribution == "Amazon"
+
+- name: Gather Debian based systems' specific variables
+  include_vars: "debian.yaml"
+  when:
+    ansible_distribution == "Debian" or
+    ansible_distribution == "Ubuntu"
+
+- name: Add portal public key to verify package
+  apt_key:
+    url: https://packagecloud.io/tyk/portal/gpgkey
+    state: present
+  when:
+    ansible_distribution == "Ubuntu" or
+    ansible_distribution == "Debian"
+
+- name: "Copy {{ package_def_file }}"
+  template:
+    src: "../files/{{ package_def_file }}"
+    dest: "{{ package_def_folder }}/{{ package_def_file }}"
+
+- name: Inject Tyk environment varibales into /etc/sysconfig/tyk-developer-portal
+  include_tasks: configure.yaml
+
+- name: Install portal
+  package:
+    name: portal={{ portal.service.version }}
+    state: present
+    update_cache: yes
+  when:
+    ansible_distribution == "Ubuntu" or
+    ansible_distribution == "Debian"
+
+- name: Install portal
+  package:
+    name: portal-{{ portal.service.version }}
+    state: present
+    update_cache: yes
+  when:
+    ansible_distribution == "RedHat"
