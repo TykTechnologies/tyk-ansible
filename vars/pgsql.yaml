@@ -8,6 +8,8 @@ postgresql_global_config_options:
     value: '{{ postgresql_unix_socket_directories | join(",") }}'
   - option: listen_addresses
     value: '*'
+  - option: log_directory
+    value: '/var/log/postgresql'
 postgresql_hba_entries:
   - { type: local, database: all,           user: postgres,                         auth_method: peer }
   - { type: local, database: all,           user: all,                              auth_method: peer }
