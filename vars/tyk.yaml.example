@@ -23,7 +23,7 @@ pgsql:
 dash:
   license:
   service:
-    version: 4.0.0
+    version: 5.7.1
     host:
     port: 3000
     proto: http
@@ -33,7 +33,7 @@ dash:
 
 gateway:
   service:
-    version: 4.0.0
+    version: 5.7.1
     host:
     port: 8080
     proto: http
@@ -55,4 +55,4 @@ gateway:
 
 pump:
   service:
-    version: 1.5.1
+    version: 1.11.1
