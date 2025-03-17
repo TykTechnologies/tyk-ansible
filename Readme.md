@@ -29,6 +29,7 @@ Installation flavors can be specified by using the `-t {tag}` at the end of the 
 | Amazon Linux | 2 | ✅ |
 | CentOS | 8 | ✅ |
 | CentOS | 7 | ✅ |
+| Debian | 11 | ✅ |
 | Debian | 10 | ✅ |
 | Debian | 9 | ✅ |
 | RHEL | 8 | ✅ |
