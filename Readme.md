@@ -8,7 +8,7 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 1. Clone repo and navigate to the repo directory.
 2. Run initalization script to initialize environment `sh scripts/init.sh`.
 3. Modify `hosts.yaml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
-4. Run `ansible-playbook playbook.yaml -t redis -t mongodb -t tyk-pro` to install Tyk.
+4. Run `ansible-playbook playbook.yaml -t redis -t mongodb -t tyk-pro` to install Tyk. To run postgres change `-t mongodb` for `-t pgsql`
 
 ## Installation flavors
 Installation flavors can be specified by using the `-t {tag}` at the end of the `ansible-playbook` command.
