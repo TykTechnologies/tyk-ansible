@@ -1,7 +1,14 @@
 [tyk_tyk-gateway]
 name=tyk_tyk-gateway
 baseurl=https://packagecloud.io/tyk/tyk-gateway/el/$releasever/$basearch
+{% if ansible_distribution_major_version == "9" %}
+# repo_gpgcheck disabled on EL9 due to packagecloud GPG key using SHA1
+# which is not supported by RHEL 9's default crypto policy.
+# Package GPG verification (gpgcheck) remains enabled using Tyk's SHA-512 signed key.
+repo_gpgcheck=0
+{% else %}
 repo_gpgcheck=1
+{% endif %}
 gpgcheck=1
 enabled=1
 gpgkey=https://keyserver.tyk.io/tyk.io.rpm.signing.key.2020

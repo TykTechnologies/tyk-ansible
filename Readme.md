@@ -32,6 +32,7 @@ Installation flavors can be specified by using the `-t {tag}` at the end of the 
 | Debian | 11 | ✅ |
 | Debian | 10 | ✅ |
 | Debian | 9 | ✅ |
+| RHEL | 9 | ✅ |
 | RHEL | 8 | ✅ |
 | RHEL | 7 | ✅ |
 | Ubuntu | 21 | ✅ |
