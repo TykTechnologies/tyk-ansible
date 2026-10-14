@@ -1,5 +1,6 @@
 postgresql_databases:
   - name: tyk_analytics
+    owner: default
 postgresql_users:
   - name: default
     password: topsecretpassword

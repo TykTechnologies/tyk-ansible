@@ -3,6 +3,7 @@ This repo allows you to install Tyk to any server(s) of your choice using Ansibl
 
 ## Requirements
 1. [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+2. On Debian and Ubuntu servers, the `gnupg` package must be installed. Standard cloud images include it.
 
 ## Getting Started
 1. Clone repo and navigate to the repo directory.
@@ -24,21 +25,17 @@ Installation flavors can be specified by using the `-t {tag}` at the end of the 
 - **pgsql**: `pgsql`
 
 ## Supported Distributions
-| Distribution | Version | Supported |
+| Distribution | Version | Status |
 | --------- | :---------: | :---------: |
-| Amazon Linux | 2 | ✅ |
-| CentOS | 8 | ✅ |
-| CentOS | 7 | ✅ |
-| Debian | 11 | ✅ |
-| Debian | 10 | ✅ |
-| Debian | 9 | ✅ |
-| RHEL | 9 | ✅ |
-| RHEL | 8 | ✅ |
-| RHEL | 7 | ✅ |
-| Ubuntu | 21 | ✅ |
-| Ubuntu | 20 | ✅ |
-| Ubuntu | 18 | ✅ |
-| Ubuntu | 16 | ✅ |
+| Ubuntu | 24.04 | ✅ Tested |
+| Ubuntu | 22.04 | ✅ Tested |
+| Debian | 12 | ✅ Tested |
+| RHEL | 8, 9 | Supported by the playbook, not tested with the latest versions |
+| Amazon Linux | 2 | Supported by the playbook, not tested with the latest versions |
+| Amazon Linux | 2023 | ❌ Not supported (no `redis` package) |
+| Rocky Linux, AlmaLinux | Any | ❌ Not supported (the roles do not detect these distributions) |
+
+Tested with Tyk Gateway and Tyk Dashboard 5.15.1, Tyk Pump 1.17.0, Redis and PostgreSQL (`-t redis -t pgsql -t tyk-pro`).
 
 ## Variables
 - `vars/tyk.yaml`
@@ -60,13 +57,13 @@ Installation flavors can be specified by using the `-t {tag}` at the end of the 
 | pgsql.port | `5432` | PGSQL server listening port  |
 | pgsql.tls | `false` | Enable if pgsql connection is secured with SSL |
 | dash.license | | Dashboard license|
-| dash.service.version | `4.0.0` | Tyk Dashboard service version |
+| dash.service.version | `5.15.1` | Tyk Dashboard service version |
 | dash.service.host | | Dashboard server host if different than the hosts url |
 | dash.service.port | `3000` | Dashboard server listening port |
 | dash.service.proto | `http` | Dashboard server protocol |
 | dash.service.tls | `false` | Set to `true` to enable SSL connections |
 | dash.storage.type | `mongo` | Set to `postgres` to use Postgres instead of MongoDB |
-| gateway.service.version | `4.0.0` | Tyk Gateway service version |
+| gateway.service.version | `5.15.1` | Tyk Gateway service version |
 | gateway.service.host | | Gateway server host if different than the hosts url |
 | gateway.service.port | `8080` | Gateway server listening port |
 | gateway.service.proto | `http` | Gateway server protocol |
@@ -81,7 +78,7 @@ Installation flavors can be specified by using the `-t {tag}` at the end of the 
 | gateway.rpc.rpcKey | | Your organisation ID to connect to the MDCB installation |
 | gateway.rpc.apiKey | | This the API key of a user used to authenticate and authorise the Gateway’s access through MDCB. The user should be a standard Dashboard user with minimal privileges so as to reduce any risk if the user is compromised. The suggested security settings are read for Real-time notifications and the remaining options set to deny |
 | gateway.rpc.groupId | | This is the `zone` that this instance inhabits, e.g. the cluster/data-centre the Gateway lives in. The group ID must be the same across all the Gateways of a data-centre/cluster which are also sharing the same Redis instance. This ID should also be unique per cluster (otherwise another Gateway cluster can pick up your keyspace events and your cluster will get zero updates). |
-| pump.service.version | `1.5.1` | Tyk Pump service version |
+| pump.service.version | `1.17.0` | Tyk Pump service version |
 
 - `vars/redis.yaml`
 
@@ -106,6 +103,7 @@ Read more about MongoDB configuration [here](https://github.com/ansible-collecti
 | --------- | :---------: | --------- |
 | postgresql_databases[] | `[]` | Array of DBs to be created |
 | postgresql_databases[].name | `tyk_analytics` | Database name |
+| postgresql_databases[].owner | `default` | Database owner. Required on PostgreSQL 15 and later, where other users cannot create tables in the `public` schema |
 | postgresql_users[] | `[]` | Array of users to be created |
 | postgresql_users[`0`].name | `default` | User name |
 | postgresql_users[`0`].password | `topsecretpassword` | User password |
